@@ -87,12 +87,12 @@ function App() {
           </div>
           <div className="section-body">
             <p className="body-lead">
-              We are two young AI engineers exploring how language models can help
-              solve problems from new angles.
+              We prototype applications for open-source language models and put
+              them in front of real problems.
             </p>
             <p>
-              We explore creative applications of LLMs to solve problems, and share
-              what we learn as the work develops.
+              We share every experiment as it happens: what worked, what failed,
+              and what we&apos;d try next.
             </p>
             <div className="focus-card">
               <div className="focus-card-heading">
@@ -118,32 +118,23 @@ function App() {
               <p className="eyebrow"><span className="section-slash">//</span> About</p>
               <h2 id="about-title">Two young AI engineers.</h2>
             </div>
-            <p className="section-aside">Semantique is founded by Roberto Zanolli and Tancredi Bosi.</p>
           </div>
 
-          <div className="people-grid">
-            {people.map((person, index) => (
-              <article className="person-card" key={person.name}>
-                <div className="person-card-top">
-                  <span className="micro-label">0{index + 1} / People</span>
-                  <span className="person-mark" aria-hidden="true">S.</span>
-                </div>
-                <div className="person-card-bottom">
-                  <div>
-                    <h3>{person.name}</h3>
-                    <p>AI engineer</p>
-                  </div>
-                  <a
-                    className="social-link"
-                    href={person.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${person.name} on LinkedIn (opens in a new tab)`}
-                  >
-                    LinkedIn <ArrowIcon />
-                  </a>
-                </div>
-              </article>
+          <div className="people-list">
+            {people.map((person) => (
+              <a
+                className="person-row"
+                key={person.name}
+                href={person.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${person.name} on LinkedIn (opens in a new tab)`}
+              >
+                <span className="person-name">{person.name}</span>
+                <span className="person-cta">
+                  LinkedIn <ArrowIcon />
+                </span>
+              </a>
             ))}
           </div>
         </section>
