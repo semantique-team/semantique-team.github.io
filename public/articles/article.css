@@ -103,19 +103,15 @@ a:focus-visible {
   color: var(--peach);
 }
 
+/* Matches the landing page navbar brand (src/styles.css). */
 .article-header .brand {
-  gap: 9px;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  min-width: 156px;
 }
 
 .brand img {
   display: block;
-  width: 22px;
-  height: 22px;
-  border-radius: 3px;
+  width: 154px;
+  height: auto;
 }
 
 /* ----------------------------------------------------------------- article */
@@ -467,6 +463,12 @@ a:focus-visible {
 @media (max-width: 640px) {
   body {
     font-size: 16px;
+  }
+
+  .article-header .brand,
+  .article-header .brand img {
+    width: 122px;
+    min-width: 122px;
   }
 
   .article {
