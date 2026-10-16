@@ -1,0 +1,492 @@
+/* Shared stylesheet for every page under /articles/.
+ *
+ * This is the single source of truth for article styling: article pages and the
+ * articles index are generated from content/articles/*.md by
+ * scripts/build-articles.mjs, so all of them inherit the same typography,
+ * bold text and "Sources" list styling from here. Add new article styles in
+ * this file, not inside a single article.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --page: #0c0d0b;
+  --surface: #141512;
+  --line: #292a25;
+  --line-strong: #393a33;
+  --text: #f0eee8;
+  --body: #cbc9c0;
+  --muted: #a5a49b;
+  --quiet: #9a9a90;
+  --peach: #e7b99c;
+  --cream: #f0debd;
+  --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
+  --measure: 720px;
+
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  color: var(--body);
+  background:
+    radial-gradient(ellipse at 78% 8%, rgb(229 174 139 / 5%), transparent 30rem),
+    var(--page);
+  font-family: 'Manrope', 'Helvetica Neue', sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+a {
+  color: var(--peach);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--cream);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--peach);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+::selection {
+  color: #10100e;
+  background: var(--peach);
+}
+
+.shell {
+  width: min(var(--measure), calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.shell--wide {
+  width: min(880px, calc(100% - 48px));
+}
+
+/* ---------------------------------------------------------------- header */
+
+.article-header {
+  display: flex;
+  height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: max(24px, calc((100vw - 1160px) / 2));
+  border-bottom: 1px solid rgb(255 255 255 / 5%);
+}
+
+.article-header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #c1c0b8;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.article-header a:hover {
+  color: var(--peach);
+}
+
+.article-header .brand {
+  gap: 9px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.brand img {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+}
+
+/* ----------------------------------------------------------------- article */
+
+.article {
+  padding-block: 88px 96px;
+}
+
+.eyebrow {
+  margin: 0 0 26px;
+  color: #c2c0b5;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.eyebrow .slash {
+  color: var(--peach);
+}
+
+.article h1 {
+  max-width: 18ch;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 1.02;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin: 30px 0 0;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.article-meta .dot {
+  color: var(--line-strong);
+}
+
+/* The Markdown body. Content lives in content/articles/*.md. */
+
+.article-body {
+  margin-top: 44px;
+}
+
+.article-body > p:first-child {
+  color: #d6d4cb;
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.article-body p {
+  margin: 0 0 22px;
+}
+
+.article-body h2 {
+  margin: 64px 0 22px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.article-body h3 {
+  margin: 40px 0 16px;
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Bold: brighter and heavier than the running text, on every article. */
+.article-body strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.article-body em {
+  font-style: italic;
+}
+
+.article-body code {
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--cream);
+  font-family: var(--mono);
+  font-size: 0.85em;
+  overflow-wrap: anywhere;
+}
+
+.article-body blockquote {
+  margin: 0 0 24px;
+  padding: 4px 0 4px 22px;
+  border-left: 2px solid var(--line-strong);
+  color: var(--muted);
+}
+
+.article-body hr {
+  height: 1px;
+  margin: 44px 0;
+  border: 0;
+  background: var(--line);
+}
+
+/* Bulleted list, direct children of the body only (so "Sources" below is
+   unaffected). */
+
+.article-body > ul,
+.article-body > ol {
+  margin: 0 0 24px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.article-body > ul > li,
+.article-body > ol > li {
+  position: relative;
+  margin: 0 0 12px;
+  padding-left: 26px;
+}
+
+.article-body > ul > li::before {
+  position: absolute;
+  top: 0.72em;
+  left: 0;
+  width: 8px;
+  height: 1px;
+  background: var(--peach);
+  content: '';
+}
+
+.article-body > ol {
+  counter-reset: item;
+}
+
+.article-body > ol > li {
+  padding-left: 32px;
+}
+
+.article-body > ol > li::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 12px;
+  content: counter(item, decimal-leading-zero);
+  counter-increment: item;
+}
+
+/* ------------------------------------------------ Sources (shared style) --
+ * Any Markdown article that ends with a "## Sources" section gets it wrapped
+ * in <section class="sources">, which numbers the list automatically. */
+
+.sources {
+  margin-top: 64px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+  counter-reset: source;
+}
+
+.sources h2 {
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+  font-size: 1.3rem;
+}
+
+.sources ul,
+.sources ol {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.sources li {
+  position: relative;
+  margin: 0 0 14px;
+  padding-left: 44px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sources li::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 11px;
+  content: counter(source, decimal-leading-zero);
+  counter-increment: source;
+}
+
+.sources a {
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------- articles index page -- */
+
+.article-intro {
+  max-width: 60ch;
+  margin: 30px 0 0;
+  color: #d6d4cb;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.index-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 46px;
+}
+
+.index-item {
+  display: block;
+  padding-block: 30px;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.index-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.index-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.index-item-title {
+  color: var(--text);
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+  transition: color 160ms ease;
+}
+
+.index-item-date {
+  flex: none;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  white-space: nowrap;
+}
+
+.index-item-summary {
+  display: block;
+  max-width: 62ch;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.index-item-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  transition: color 160ms ease;
+}
+
+.index-item svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 160ms ease;
+}
+
+.index-item:hover .index-item-title,
+.index-item:hover .index-item-more {
+  color: var(--peach);
+}
+
+.index-item:hover svg {
+  transform: translateX(3px);
+}
+
+.index-empty {
+  margin-top: 46px;
+  padding: 27px 30px;
+  border: 1px dashed #414139;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ----------------------------------------------------------------- footer */
+
+.article-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 90px;
+  padding-block: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--quiet);
+  font-size: 10px;
+}
+
+.article-footer a {
+  color: #c1c0b8;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.article-footer a:hover {
+  color: var(--peach);
+}
+
+.footer-brand {
+  color: #d3d0c6;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+/* ------------------------------------------------------------------ small */
+
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+  }
+
+  .article {
+    padding-block: 60px 72px;
+  }
+
+  .article-body > p:first-child {
+    font-size: 17px;
+  }
+
+  .index-item-head {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

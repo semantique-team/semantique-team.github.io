@@ -1,0 +1,105 @@
+<!doctype html>
+<!-- GENERATED FILE — do not edit. Source of truth: content/articles/*.md -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17191b" />
+    <meta name="description" content="TypeSafe's Jev and the open-source Laya are two models in a class that returns typed decisions." />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="What are System 1 models?" />
+    <meta property="og:description" content="TypeSafe's Jev and the open-source Laya are two models in a class that returns typed decisions." />
+    <meta property="og:site_name" content="Semantique" />
+    <link rel="stylesheet" href="/articles/article.css" />
+    <title>What are System 1 models? — Semantique</title>
+  </head>
+  <body>
+    <header class="article-header">
+      <a class="brand" href="/">
+        <img src="/favicon.png" alt="" />
+        semantique
+      </a>
+      <a href="/articles/">← All articles</a>
+    </header>
+
+    <main class="shell article">
+      <p class="eyebrow"><span class="slash">//</span> Notes from the lab</p>
+
+      <h1>What are System 1 models?</h1>
+
+      <p class="article-meta">
+        <span>Semantique</span>
+        <span class="dot">·</span>
+        <span>16 Oct 2026</span>
+        <span class="dot">·</span>
+        <span>8 min read</span>
+      </p>
+
+      <div class="article-body">
+<p>In September 2026, TypeSafe AI released <strong>Jev</strong>, the first of a class it calls &quot;System One models&quot;. These are built to return decisions, not text (<a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe</a>). A second model, <strong>Laya</strong>, applies the same idea in an open direction. An independent lab publishes it under an open licence, and it returns a small set of typed, probabilistic answers that a program can act on directly, with no generated prose (<a href="https://huggingface.co/convaiinnovations/laya">Hugging Face</a>).</p>
+<h2>Where the name comes from</h2>
+<p>&quot;System 1&quot; is not a new coinage in machine learning. It comes from Daniel Kahneman&#39;s 2011 book <em>Thinking, Fast and Slow</em>, which draws a distinction between two modes of thought: System 1 is fast and instinctive, System 2 slower and more deliberate (<a href="https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow">Wikipedia</a>). TypeSafe&#39;s documentation says the class name draws on that same distinction (<a href="https://docs.typesafe.ai/concepts/system-one">TypeSafe docs</a>).</p>
+<p>The phrase already had a life in AI before Jev. In the reasoning-model literature, &quot;System 2&quot; generally refers to slower, step-by-step test-time computation, the mode associated with models like OpenAI&#39;s o1/o3 and DeepSeek&#39;s R1, while &quot;System 1&quot; refers to fast, heuristic, single-pass answers (<a href="https://arxiv.org/abs/2502.17419">arXiv:2502.17419</a>). Papers such as <em>Cognitive Decision Routing in Large Language Models</em> explore routing between the two modes (<a href="https://arxiv.org/html/2508.16636v1">arXiv:2508.16636</a>).</p>
+<p>TypeSafe&#39;s use of the term is narrower. For them, a &quot;System One model&quot; is not just a fast model. Its only function is to produce structured decisions.</p>
+<h2>From generating text to making decisions</h2>
+<p>An ordinary large language model returns a string. That string can be an answer, a refusal, a paragraph of reasoning, or something malformed. To use it, software must parse and validate it, and there is always a chance the output does not fit.</p>
+<p>A decision model returns values instead of text. TypeSafe describes Jev as &quot;a frontier-intelligence function call: unstructured state in, typed probabilistic decisions out&quot; (<a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe</a>). You supply a <strong>state</strong> (a string, a JSON object, or a list of strings) and one or more <strong>questions</strong>, and you get back a probability distribution for each. Because the possible answers are defined in advance, TypeSafe claims the model &quot;never makes type errors.&quot;</p>
+<p>The questions come in three types, which both Jev and Laya share (<a href="https://docs.typesafe.ai/concepts/system-one">TypeSafe docs</a>, <a href="https://huggingface.co/convaiinnovations/laya">Laya</a>):</p>
+<ul>
+<li><strong>Choice</strong>: pick one option from an unordered list.</li>
+<li><strong>Score</strong>: place the state on an ordered scale.</li>
+<li><strong>Noul</strong>: answer a yes/no question as a probability. TypeSafe defines a Noul answer as &quot;a single number representing the probability that the answer is yes&quot; (<a href="https://docs.typesafe.ai/primitives/noul">TypeSafe docs</a>).</li>
+</ul>
+<p>The odd word <em>noul</em> is the source&#39;s term, not a typo; it is the boolean primitive.</p>
+<p>Two design choices follow. First, output is <strong>non-autoregressive</strong>: the model produces all its answers in a single forward pass, without emitting one token at a time conditioned on the previous one. They are sampled in parallel. Second, every answer carries a probability, and those probabilities aim to be <strong>calibrated</strong>: a statement of 90% should be right roughly 90% of the time across many predictions. Calibration applies to groups of predictions, not to any single answer, a caveat TypeSafe states plainly (<a href="https://docs.typesafe.ai/concepts/system-one">TypeSafe docs</a>).</p>
+<h2>Jev</h2>
+<p>Jev was released in limited early access on 15 September 2026, alongside the announcement of a US$40M seed round led by DCVC (<a href="https://en.wikipedia.org/wiki/Jev_(AI_model)">Wikipedia</a>). TypeSafe AI is a San Francisco company founded in 2024; its chief executive, Diogo Almeida, spent roughly four years at OpenAI working on reinforcement learning from human feedback and the research behind ChatGPT (<a href="https://en.wikipedia.org/wiki/Jev_(AI_model)">Wikipedia</a>). The model is named after the economist William Stanley Jevons, and trained with a method the company calls Reinforcement Learning for Calibrated Decisions (RLCD).</p>
+<p>The performance figures are TypeSafe&#39;s own. The company claims end-to-end response times of 70 to 500 ms for System One workloads, &quot;two orders of magnitude&quot; faster than frontier LLMs on comparable tasks, at an input price of $0.042 per million tokens with generated-output cost treated as free (<a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe</a>). On its own published workflows it reports being 40 to 200× faster and 40 to 400× cheaper, while noting that those workflows were written by its own team and may be biased (<a href="https://en.wikipedia.org/wiki/Jev_(AI_model)">Wikipedia</a>). TypeSafe has not published Jev&#39;s architecture, weights, or a technical paper; it describes the model as transformer-based, and outside observers have speculated it resembles a BERT-style encoder or an open-weight LLM (<a href="https://en.wikipedia.org/wiki/Jev_(AI_model)">Wikipedia</a>).</p>
+<h2>Laya</h2>
+<p>Laya is the open-source counterpart. It is a non-autoregressive System 1 decision model published under Apache 2.0 by Convai Innovations (<a href="https://huggingface.co/convaiinnovations/laya">Hugging Face</a>). Its architecture is documented: a ModernBERT-large encoder (395M parameters, bidirectional) plus a decision head trained from scratch (two transformer layers, an option-marker scorer, and an act/escalate head), for 421M parameters in total. A multilingual variant uses mmBERT-base (322M) across 100+ languages. It answers typed questions in a single forward pass, reported at around 33 ms, and, like Jev, trains with RLCD against strictly proper scoring rules.</p>
+<p>Laya also ships a self-hosted HTTP server on the same <code>POST /v1/systemone</code> request and response shape as TypeSafe&#39;s API. Existing Jev clients can point at it by changing the base URL.</p>
+<p>Laya&#39;s model card is unusual for a launch: it includes a section called &quot;Honest Limits.&quot; It states that the base checkpoints are near chance on its typed-decisions benchmark zero-shot (0.362 accuracy against a 0.461 majority-class baseline), and that the stronger 0.766 score belongs to a checkpoint fine-tuned on that benchmark&#39;s own training split. It also flags that high-cardinality choice questions (dozens of options) degrade sharply, that ordinal score questions are its weakest primitive, and that the shipped checkpoints are over-confident until a temperature is refit on your own data (<a href="https://huggingface.co/convaiinnovations/laya">Hugging Face</a>).</p>
+<h2>Other work in the same direction</h2>
+<p>Laya and Jev are not the only efforts. <strong>Von</strong> is another open-source, non-autoregressive System One decision model: a 395M ModernBERT encoder, CPU-served, Apache-2.0, and a drop-in server for the same <code>/v1/systemone</code> wire protocol (<a href="https://github.com/wfzyx/von">GitHub</a>). It answers the same Choice, Noul, and Score questions over text or JSON state.</p>
+<p>Toolmakers are adapting their stacks too. LangChain published a guide to wrapping Jev as a type-safe classifier, using it for model routing and as an &quot;Auto Mode&quot; middleware that gates an agent&#39;s tool calls, a guardrail decision made on every step (<a href="https://www.langchain.com/blog/building-a-harness-with-jev">LangChain</a>).</p>
+<h2>Why this matters when building software</h2>
+<p>The appeal lies more in the shape of the output and the cost of asking than in raw intelligence.</p>
+<ul>
+<li><strong>Speed.</strong> A decision in tens to hundreds of milliseconds can sit inside a request path. That is hard to do with a model that reasons for seconds.</li>
+<li><strong>Cost.</strong> TypeSafe&#39;s pricing works out to a fraction of a cent per call. You can afford to score every trace, message, or row, not just a sample.</li>
+<li><strong>Integration.</strong> Typed outputs slot into ordinary code as what TypeSafe calls &quot;smart if-statements&quot;: classify, route, score, extract, or branch where hand-written rules are too brittle.</li>
+<li><strong>Escalation.</strong> Because each answer carries a confidence, a program can act when confidence is high and hand off to a person or a reasoning model when it is not.</li>
+</ul>
+<p>In a product, these models tend to take supporting roles and stay out of the conversation itself: routing and triage, spam and jailbreak detection, output verification, quality scoring, and map-reduce over large volumes of text. The pattern is a fast model making cheap, narrow judgments, wrapped by conventional code and a slower model doing the heavy work.</p>
+<h2>Limitations and open questions</h2>
+<p>Several things remain unsettled.</p>
+<p>Calibration is a property of distributions, not of individual answers, so a high-confidence wrong answer is still possible. TypeSafe frames &quot;System 1&quot; as implying error-prone and argues this class can be made more reliable than the alternatives. That is an argument, not a demonstrated result. Jev&#39;s architecture and weights are undisclosed, so its benchmark results cannot be independently reproduced. Laya is open, but its own card shows that zero-shot accuracy is weak and that most of the capability comes from fine-tuning on domain data, so adopting it is a training project, not a drop-in. Questions asked in a single pass cannot depend on each other&#39;s answers; a dependency needs a second call.</p>
+<p>There is also a boundary question with no clear answer yet: where does a &quot;System 1 model&quot; end and an ordinary fine-tuned classifier begin? The primitives look like classical classification and calibration. What is new is doing it zero-shot over arbitrary natural-language state, with a fixed interface, fast enough and cheap enough to call freely.</p>
+<h2>A closing note</h2>
+<p>The interesting thing about System 1 models is not that they are faster than reasoning models. That was always going to happen in some form. It is the proposal that a model should stop being a conversational partner and become a component: something with an interface you can depend on, whose output a program can consume without parsing, guessing, or validating. Whether that becomes a distinct class or just a good pattern that gets absorbed into every stack is still open. It is worth watching, and worth being skeptical about, in roughly equal measure.</p>
+<section class="sources"><h2>Sources</h2>
+<ul>
+<li>Introducing System One Models &amp; Jev: <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">typesafe.ai</a></li>
+<li>System One, TypeSafe docs: <a href="https://docs.typesafe.ai/concepts/system-one">docs.typesafe.ai</a></li>
+<li>Noul, TypeSafe docs: <a href="https://docs.typesafe.ai/primitives/noul">docs.typesafe.ai</a></li>
+<li>Jev (AI model): <a href="https://en.wikipedia.org/wiki/Jev_(AI_model)">Wikipedia</a></li>
+<li>convaiinnovations/laya: <a href="https://huggingface.co/convaiinnovations/laya">Hugging Face</a></li>
+<li>NandhaKishorM/laya: <a href="https://github.com/NandhaKishorM/laya">GitHub</a></li>
+<li>Building a Harness with Jev: <a href="https://www.langchain.com/blog/building-a-harness-with-jev">LangChain</a></li>
+<li>wfzyx/von: <a href="https://github.com/wfzyx/von">GitHub</a></li>
+<li>Thinking, Fast and Slow: <a href="https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow">Wikipedia</a></li>
+<li>From System 1 to System 2: A Survey of Reasoning Large Language Models: <a href="https://arxiv.org/abs/2502.17419">arXiv</a></li>
+<li>Cognitive Decision Routing in Large Language Models: <a href="https://arxiv.org/html/2508.16636v1">arXiv</a></li>
+</ul>
+</section>
+      </div>
+    </main>
+
+    <footer class="shell article-footer">
+      <a class="footer-brand" href="/">semantique.</a>
+      <span>AI engineering lab</span>
+      <a href="/articles/">← Back to all articles</a>
+    </footer>
+  </body>
+</html>

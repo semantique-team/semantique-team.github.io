@@ -1,11 +1,15 @@
+import { articles } from './articles.generated'
+
 const people = [
   {
     name: 'Roberto Zanolli',
-    href: 'https://www.linkedin.com/in/roberto-zanolli-2003-bo/',
+    linkedin: 'https://www.linkedin.com/in/roberto-zanolli-2003-bo/',
+    github: 'https://github.com/RobertoZanolli',
   },
   {
     name: 'Tancredi Bosi',
-    href: 'https://www.linkedin.com/in/tancredi-bosi-747004298/',
+    linkedin: 'https://www.linkedin.com/in/tancredi-bosi-747004298/',
+    github: 'https://github.com/tancredibosi',
   },
 ]
 
@@ -18,6 +22,10 @@ function ArrowIcon() {
 }
 
 function App() {
+  // The landing page teases only the most recent article; the full list lives
+  // at /articles/ (generated from content/articles/*.md).
+  const latestArticle = articles[0]
+
   return (
     <>
       <a className="skip-link" href="#main">
@@ -32,7 +40,7 @@ function App() {
         <nav aria-label="Main navigation">
           <a href="#lab">Lab</a>
           <a href="#about">About</a>
-          <a href="#articles">Articles</a>
+          <a href="/articles/">Articles</a>
         </nav>
       </header>
 
@@ -122,19 +130,29 @@ function App() {
 
           <div className="people-list">
             {people.map((person) => (
-              <a
-                className="person-row"
-                key={person.name}
-                href={person.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`${person.name} on LinkedIn (opens in a new tab)`}
-              >
+              <div className="person-row" key={person.name}>
                 <span className="person-name">{person.name}</span>
-                <span className="person-cta">
-                  LinkedIn <ArrowIcon />
-                </span>
-              </a>
+                <div className="person-links">
+                  <a
+                    className="person-cta"
+                    href={person.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${person.name} on LinkedIn (opens in a new tab)`}
+                  >
+                    LinkedIn <ArrowIcon />
+                  </a>
+                  <a
+                    className="person-cta"
+                    href={person.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${person.name} on GitHub (opens in a new tab)`}
+                  >
+                    GitHub <ArrowIcon />
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </section>
@@ -145,17 +163,36 @@ function App() {
               <p className="eyebrow"><span className="section-slash">//</span> Articles</p>
               <h2 id="articles-title">Notes from the lab.</h2>
             </div>
-            <span className="micro-label article-count">0 articles</span>
+            {articles.length > 0 && (
+              <a className="micro-label articles-index-link" href="/articles/">
+                All articles <ArrowIcon />
+              </a>
+            )}
           </div>
 
-          <div className="empty-state">
-            <span className="empty-symbol" aria-hidden="true">✳</span>
-            <div>
-              <h3>Nothing published yet.</h3>
-              <p>When we have something to share, it will find its way here.</p>
+          {latestArticle ? (
+            <div className="articles-list">
+              <a className="article-row" href={latestArticle.href}>
+                <span className="article-row-copy">
+                  <span className="article-title">{latestArticle.title}</span>
+                  <span className="article-summary">{latestArticle.summary}</span>
+                </span>
+                <span className="article-cta">
+                  <span className="article-date">{latestArticle.displayDate}</span>
+                  Read <ArrowIcon />
+                </span>
+              </a>
             </div>
-            <span className="empty-coordinate">S / NOTES</span>
-          </div>
+          ) : (
+            <div className="empty-state">
+              <span className="empty-symbol" aria-hidden="true">✳</span>
+              <div>
+                <h3>Nothing published yet.</h3>
+                <p>When we have something to share, it will find its way here.</p>
+              </div>
+              <span className="empty-coordinate">S / NOTES</span>
+            </div>
+          )}
         </section>
       </main>
 
