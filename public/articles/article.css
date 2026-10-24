@@ -168,6 +168,16 @@ a:focus-visible {
   margin-top: 44px;
 }
 
+/* Charts and diagrams stay inside the reading column: at their natural size a
+   1520px chart dwarfs the text. Tune the max-width to taste. */
+.article-body img {
+  display: block;
+  width: auto;
+  max-width: min(580px, 100%);
+  height: auto;
+  margin: 32px 0;
+}
+
 .article-body > p:first-child {
   color: #d6d4cb;
   font-size: 19px;
