@@ -78,7 +78,7 @@ function App() {
               </div>
               <a
                 className="panel-arrow"
-                href="/models/"
+                href="/models/ant/"
                 aria-label="See the ANT models (opens the model gallery)"
               >
                 <ArrowIcon />
