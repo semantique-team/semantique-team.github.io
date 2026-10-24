@@ -1,0 +1,355 @@
+<!doctype html>
+<!-- GENERATED FILE — do not edit. Source of truth: content/models/*.md -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0d0b" />
+    <meta name="description" content="ANT-4B and ANT-08B: the Semantique System 1 decision models, with their numbers, their limits and the repositories behind them." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Models — Semantique" />
+    <meta property="og:description" content="ANT-4B and ANT-08B: the Semantique System 1 decision models, with their numbers, their limits and the repositories behind them." />
+    <meta property="og:site_name" content="Semantique" />
+    <link rel="stylesheet" href="/models/models.css" />
+    <title>Models — Semantique</title>
+    <script>document.documentElement.classList.add('js')</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Semantique home">
+        <img src="/logo.svg" alt="Semantique" />
+      </a>
+      <nav aria-label="Site navigation">
+        <a href="/">Lab</a>
+        <a href="/articles/">Articles</a>
+        <a href="/" aria-current="page">Models</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero page-shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">The ANT models</h1>
+          <p class="hero-lead">
+            ANT-4B and ANT-08B are open-source System 1 decision models. Give one a
+            state, a question and a list of candidates, and it answers with
+            calibrated probabilities and a verdict: act on the top candidate, or
+            hand the decision back.
+          </p>
+          <div class="hero-actions" data-reveal>
+            <a class="button" href="/articles/building-ant-4b-and-ant-08b.html">
+              Read the build log
+            </a>
+            <a class="text-link" href="#models">See the numbers</a>
+          </div>
+        </div>
+
+        <div class="decision" data-ui data-reveal style="--reveal-delay: 130ms">
+          <div class="decision-head">
+            <span class="decision-model">ANT 4B</span>
+            <span class="decision-ready">ready</span>
+          </div>
+          <p class="decision-question">Which department should handle this case?</p>
+          <p class="decision-input">
+            Customer has been charged twice for the same invoice. Refund requested.
+          </p>
+          <ul class="decision-candidates">
+            <li>
+              <span class="candidate-name">Billing team</span>
+              <span class="candidate-bar"><span class="candidate-fill" style="width: 43.9%"></span></span>
+              <span class="candidate-value">43.9%</span>
+            </li>
+            <li>
+              <span class="candidate-name">Engineering support</span>
+              <span class="candidate-bar"><span class="candidate-fill" style="width: 36%"></span></span>
+              <span class="candidate-value">36.0%</span>
+            </li>
+            <li>
+              <span class="candidate-name">CS team</span>
+              <span class="candidate-bar"><span class="candidate-fill" style="width: 8%"></span></span>
+              <span class="candidate-value">8.0%</span>
+            </li>
+            <li>
+              <span class="candidate-name">Sales team</span>
+              <span class="candidate-bar"><span class="candidate-fill" style="width: 6.4%"></span></span>
+              <span class="candidate-value">6.4%</span>
+            </li>
+            <li>
+              <span class="candidate-name">InfoSec</span>
+              <span class="candidate-bar"><span class="candidate-fill" style="width: 3.4%"></span></span>
+              <span class="candidate-value">3.4%</span>
+            </li>
+            <li>
+              <span class="candidate-name">Counsel</span>
+              <span class="candidate-bar"><span class="candidate-fill" style="width: 2.3%"></span></span>
+              <span class="candidate-value">2.3%</span>
+            </li>
+          </ul>
+          <div class="decision-verdict">
+            <span class="verdict-label">Billing team</span>
+            <span class="verdict-action">escalate</span>
+          </div>
+          <p class="decision-note">
+            The label matches, but the margin over engineering support is too narrow
+            to act on, so the policy hands it back.
+          </p>
+        </div>
+      </section>
+
+      <section class="models-section page-shell" id="models" aria-labelledby="models-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="models-title">The models</h2>
+            <p class="section-lead">
+              Same recipe, two backbones. Both heads were trained on the same
+              multitask dataset for the same three epochs, with the same batch
+              size, learning rate and seed, so the numbers below compare
+              backbones rather than training runs.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>What both models share</h3>
+            <ul class="shared-list">
+              <li>A frozen Qwen backbone used as an encoder. No LM head, no text generation.</li>
+              <li>5,952 training rows, 688 validation, 648 test, 456 out-of-distribution.</li>
+              <li>29 use cases, in English and Italian.</li>
+              <li>Two to a hundred candidates, order does not matter, embeddings cache.</li>
+              <li>Apache-2.0, and work in progress on both repositories.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="switcher" role="tablist" aria-label="Choose a model" data-reveal>
+{{tabs}}
+        </div>
+
+        <div class="model-panels" data-reveal>
+{{panels}}
+        </div>
+
+        <div class="figure-row">
+          <figure class="plate" data-reveal>
+            <img
+              src="/img/charts/02-quality-test-ood.png"
+              width="1520"
+              height="608"
+              loading="lazy"
+              alt="Two bar charts side by side: test and out-of-distribution accuracy for ANT-4B and ANT-08B, and the calibration error of the same four numbers."
+            />
+            <figcaption>
+              Accuracy and calibration error, both models, on the same 648-row test
+              split and the same 456-row out-of-distribution split.
+            </figcaption>
+          </figure>
+
+          <div class="figure-split">
+            <figure class="plate" data-reveal>
+              <img
+                src="/img/charts/03-per-use-case.png"
+                width="1280"
+                height="1040"
+                loading="lazy"
+                alt="A horizontal bar chart of test accuracy for 29 use cases, ANT-4B and ANT-08B side by side, from support routing at the top to transaction risk at the bottom."
+              />
+              <figcaption>
+                Per-use-case test accuracy. The 4B earns its size where the distinction
+                is fine; the 0.8B is competitive where meaning is coarse.
+              </figcaption>
+            </figure>
+
+            <div class="limits" data-reveal style="--reveal-delay: 110ms">
+              <h3>Where they still fail</h3>
+              <ul>
+                <li>
+                  transaction_risk is near chance for both models: 0.125 for the 4B and
+                  0.000 for the 0.8B, on eight test rows.
+                </li>
+                <li>
+                  urgenza_ticket_it sits around 0.35 for both. More parameters will
+                  not fix those two; they are first on the list for the next data pass.
+                </li>
+                <li>
+                  Both repositories are marked work in progress on purpose: the
+                  benchmarks and the calibration guidance are not finished.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-section page-shell" aria-labelledby="how-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="how-title">How a decision is made</h2>
+            <p class="section-lead">
+              ANT does not generate text. The decoder behind it is used as an encoder,
+              the trainable part is a small scoring head, and the output is meant for
+              software that has to act.
+            </p>
+          </div>
+        </div>
+
+        <div class="how-grid">
+          <div class="how-steps" data-reveal>
+            <div class="how-step" data-step="encode">
+              <h3>Encode the state and every candidate.</h3>
+              <p>
+                One shared frozen decoder embeds the state with its question, and
+                each candidate separately.
+              </p>
+            </div>
+            <div class="how-step" data-step="score">
+              <h3>Score them in a single pass.</h3>
+              <p>
+                One logit per candidate, then a softmax with a fitted temperature
+                turns the logits into probabilities.
+              </p>
+            </div>
+            <div class="how-step" data-step="route">
+              <h3>Decide, or hand it back.</h3>
+              <p>
+                A risk and coverage policy fitted on validation data decides whether
+                the top probability is good enough to act on.
+              </p>
+            </div>
+          </div>
+
+          <div class="how-stage" data-reveal style="--reveal-delay: 120ms">
+            <div class="stage-plate">
+              <img
+                src="/img/ant-architecture.svg"
+                width="1000"
+                height="840"
+                loading="lazy"
+                alt="Diagram of the ANT scoring path: the state and question and every candidate are encoded by two encoders sharing one frozen Qwen decoder, scored per candidate, calibrated, and routed to execute or escalate."
+              />
+            </div>
+            <p class="stage-caption">
+              <span data-stage-caption>Encoding: one frozen decoder, two encoders.</span>
+              <a class="text-link" href="/articles/building-ant-4b-and-ant-08b.html">
+                Full size in the build log
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="how-code" data-reveal>
+          <pre><code>result = ant.predict(
+    state,
+    question,
+    candidates=[
+        "Billing",
+        "Technical Support",
+        "Sales",
+        "Legal",
+    ],
+)</code></pre>
+          <div class="code-output">
+            <h3>What comes back</h3>
+            <p>
+              The chosen candidate, the calibrated probability of every candidate,
+              the confidence metrics and the action: execute or escalate.
+            </p>
+          </div>
+        </div>
+
+        <div class="figure-split" data-reveal>
+          <figure class="plate">
+            <img
+              src="/img/charts/04-latency-mps.png"
+              width="1280"
+              height="736"
+              loading="lazy"
+              alt="A line chart of warm encode latency against input tokens on an Apple M3, log scale, with the old thirteen-second baseline marked as a dashed line and the shipped configuration below it."
+            />
+            <figcaption>
+              Warm encode latency against input tokens on an M3, for the shipped
+              configuration and two quantized ones.
+            </figcaption>
+          </figure>
+
+          <div class="limits">
+            <h3>Thirteen seconds to 372 milliseconds</h3>
+            <p>
+              The first working prediction on the 4B model took about thirteen
+              seconds on the M3, which made the playground unusable. Encoding
+              dominated the profile, and the path was doing it twice: one fused
+              single-pass encode, inference mode and length bucketing brought the
+              warm median to 372 ms on a fourteen-token input, about eight times
+              faster. Longer inputs still cost — 1,446 ms at 210 tokens, 2,866 ms
+              at 418 — and the floor is the linear attention, not the tuning.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="try-section page-shell" aria-labelledby="try-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="try-title">Try it</h2>
+            <p class="section-lead">
+              The playground is a FastAPI server plus a Vite interface. Point it at
+              one or more checkpoint directories and it lists the models it can
+              serve; every request runs through the same predictor the Python API
+              uses.
+            </p>
+          </div>
+
+          <ul class="repo-list" data-reveal style="--reveal-delay: 90ms">
+            <li>
+              <a href="https://github.com/semantique-team/ant-4b">ANT-4B</a>
+              <span>Model, training scripts and checkpoints</span>
+            </li>
+            <li>
+              <a href="https://github.com/semantique-team/ant-08b">ANT-08B</a>
+              <span>Model and the MLX backend</span>
+            </li>
+            <li>
+              <a href="https://github.com/semantique-team/playground">Playground</a>
+              <span>FastAPI serving layer and web interface</span>
+            </li>
+          </ul>
+        </div>
+
+        <figure class="shot-figure" data-reveal>
+          <div class="shot">
+            <img
+              src="/img/playground.png"
+              width="1908"
+              height="988"
+              loading="lazy"
+              alt="The Semantique Playground: an input panel with the question type and use case selectors, and an output panel listing six candidate departments with their calibrated probabilities."
+            />
+          </div>
+          <figcaption>
+            A support ticket routed to the billing team at 43.9% against 36.0% for
+            engineering support. The label matches, the margin does not, so the
+            policy escalates.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="cta-section page-shell">
+        <p class="cta-sentence" data-reveal>
+          Clone a model, serve it on your own machine, and put a decision inside a
+          request path.
+        </p>
+        <a class="button" href="https://github.com/semantique-team/ant-4b" data-reveal style="--reveal-delay: 90ms">
+          Clone ANT-4B
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer page-shell">
+      <a class="footer-brand" href="/">semantique.</a>
+      <span>AI engineering lab</span>
+      <a href="#top" class="back-to-top">Back to top</a>
+    </footer>
+
+    <script src="/models/models.js"></script>
+  </body>
+</html>

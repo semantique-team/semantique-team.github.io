@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "articles": "node scripts/build-articles.mjs",
-    "predev": "node scripts/build-articles.mjs",
+    "models": "node scripts/build-models.mjs",
+    "predev": "npm run articles && npm run models",
     "dev": "vite",
-    "prebuild": "node scripts/build-articles.mjs",
+    "prebuild": "npm run articles && npm run models",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

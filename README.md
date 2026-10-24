@@ -43,3 +43,42 @@ no per-article HTML to maintain.
 
 `npm run dev` and `npm run build` run the generator automatically, so adding a
 Markdown file is usually all you need to do.
+
+## Models
+
+The model gallery at `/models/` is generated the same way, from `content/models/`:
+
+```md
+---
+name: ANT-4B
+slug: ant-4b
+tagline: One line under the name.
+summary: One paragraph, shown in the gallery.
+backbone: Qwen3.5-4B
+parameters: 4.2B
+trainable: 2632704
+checkpoint: ant-4b-2026-10-24
+licence: Apache-2.0
+status: Work in progress
+repo: https://github.com/semantique-team/ant-4b
+article: /articles/building-ant-4b-and-ant-08b.html
+test_accuracy: 0.739
+ood_accuracy: 0.597
+test_ece: 0.056
+ood_ece: 0.123
+latency: 372 ms warm, 14 tokens, M3
+order: 1
+---
+
+The longer description of the model.
+```
+
+`npm run models` writes `public/models/index.html` from that Markdown plus the
+layout in `content/models/_layout.html`. The gallery is styled by
+`public/models/models.css` and behaves with `public/models/models.js`: the model
+switcher, the section entrances and the diagram caption. Without JavaScript the
+page still shows every model, one after the other.
+
+The numbers come from the model repositories themselves (`runs/*/metrics.json`
+in `semantique-team/ant-4b` and `semantique-team/ant-08b`); the charts and the
+playground screenshot are copied into `public/img/`.
