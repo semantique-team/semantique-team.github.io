@@ -46,10 +46,14 @@ Markdown file is usually all you need to do.
 
 ## Models
 
-The model gallery at `/models/` is generated the same way, from `content/models/`:
+The model pages are generated the same way, from `content/models/`:
 
 ```md
 ---
+family: ANT
+family_slug: ant
+type: decision
+family_summary: Shown once per family, on the /models/ directory card.
 name: ANT-4B
 slug: ant-4b
 tagline: One line under the name.
@@ -73,11 +77,20 @@ order: 1
 The longer description of the model.
 ```
 
-`npm run models` writes `public/models/index.html` from that Markdown plus the
-layout in `content/models/_layout.html`. The gallery is styled by
-`public/models/models.css` and behaves with `public/models/models.js`: the model
-switcher, the section entrances and the diagram caption. Without JavaScript the
-page still shows every model, one after the other.
+`npm run models` writes two things from that Markdown:
+
+- `public/models/index.html` — the directory at `/models/`, one row per family,
+  filtered by type (decision models now, speech-to-text next), from
+  `content/models/_index.html`;
+- `public/models/<family_slug>/index.html` — the family page, from
+  `content/models/_layout.html`. `/models/ant/` holds the model switcher, the
+  numbers, the charts, how a decision is made and how to run it. A directory row
+  can open one model directly with `?model=ant-08b`.
+
+Both are styled by `public/models/models.css` and behave with
+`public/models/models.js`: the filters, the model switcher, the section entrances
+and the diagram caption. Without JavaScript both lists and every model still
+show, one after the other.
 
 The numbers come from the model repositories themselves (`runs/*/metrics.json`
 in `semantique-team/ant-4b` and `semantique-team/ant-08b`); the charts and the

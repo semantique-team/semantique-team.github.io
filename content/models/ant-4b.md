@@ -1,4 +1,8 @@
 ---
+family: ANT
+family_slug: ant
+type: decision
+family_summary: Two System 1 decision models, the same training recipe on two backbones: a 4.2B encoder for the hard semantic cases, and a 753M one that fits on a laptop.
 name: ANT-4B
 slug: ant-4b
 tagline: The model that holds on the hard cases

@@ -1,4 +1,7 @@
 ---
+family: ANT
+family_slug: ant
+type: decision
 name: ANT-08B
 slug: ant-08b
 tagline: The same recipe on a smaller backbone

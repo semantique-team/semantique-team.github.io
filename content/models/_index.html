@@ -1,0 +1,123 @@
+<!doctype html>
+<!-- GENERATED FILE — do not edit. Source of truth: content/models/*.md -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0d0b" />
+    <meta name="description" content="The models the Semantique lab is building: the ANT decision models, and the speech-to-text family that comes next." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Models — Semantique" />
+    <meta property="og:description" content="The models the Semantique lab is building: the ANT decision models, and the speech-to-text family that comes next." />
+    <meta property="og:site_name" content="Semantique" />
+    <link rel="stylesheet" href="/models/models.css" />
+    <title>Models — Semantique</title>
+    <script>document.documentElement.classList.add('js')</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Semantique home">
+        <img src="/logo.svg" alt="Semantique" />
+      </a>
+      <nav aria-label="Site navigation">
+        <a href="/">Lab</a>
+        <a href="/articles/">Articles</a>
+        <a href="/models/" aria-current="page">Models</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero page-shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">The models</h1>
+          <p class="hero-lead" data-reveal>
+            The families of models the lab is building. Decision models are here;
+            speech-to-text comes next.
+          </p>
+          <div class="hero-actions" data-reveal>
+            <a class="button" href="/models/ant/">See the ANT family</a>
+            <a class="text-link" href="/articles/building-ant-4b-and-ant-08b.html">
+              Read the build log
+            </a>
+          </div>
+        </div>
+
+        <figure class="shot-figure" data-reveal style="--reveal-delay: 130ms">
+          <div class="shot shot--panel">
+            <img
+              src="/img/playground.png"
+              width="1908"
+              height="988"
+              alt="The output panel of the Semantique Playground: six candidate departments with their calibrated probabilities, and an escalate verdict for the billing team."
+            />
+          </div>
+          <figcaption>
+            The Semantique Playground, serving ANT-4B.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="directory page-shell" aria-labelledby="directory-heading">
+        <h2 id="directory-heading" class="directory-heading" data-reveal>Choose a family</h2>
+
+        <div class="switcher" role="tablist" aria-label="Filter models by type" data-reveal>
+          <button
+            class="tab is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-family="decision"
+          >
+            Decision models
+          </button>
+          <button
+            class="tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-family="stt"
+          >
+            STT models <span class="badge">coming soon</span>
+          </button>
+        </div>
+
+        <div class="family-list is-active" data-family-list="decision">
+          <div class="family-rows">
+{{cards}}
+          </div>
+        </div>
+
+        <div class="family-list" data-family-list="stt">
+          <div class="model-empty" data-reveal>
+            <h3>Speech-to-text models, coming soon</h3>
+            <p>
+              This is the next family we are working on. Nothing is published in it
+              yet — today the lab ships decision models.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-section page-shell">
+        <p class="cta-sentence" data-reveal>
+          Serve the models on your own machine, and put a decision inside a request
+          path.
+        </p>
+        <a class="button" href="https://github.com/semantique-team/playground" data-reveal style="--reveal-delay: 90ms">
+          Get the playground
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer page-shell" data-reveal>
+      <a class="footer-brand" href="/">semantique.</a>
+      <span>AI engineering lab</span>
+      <a href="#top" class="back-to-top">Back to top</a>
+    </footer>
+
+    <script src="/models/models.js"></script>
+  </body>
+</html>

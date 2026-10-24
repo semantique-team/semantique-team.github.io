@@ -9,7 +9,7 @@
 (function () {
   'use strict'
 
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'))
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab[data-model]'))
   var panels = Array.prototype.slice.call(document.querySelectorAll('.model-panel'))
 
   function select(slug, focus) {
@@ -45,7 +45,34 @@
 
   if (tabs.length) {
     select(tabs[0].getAttribute('data-model'))
+
+    // A card in the directory can open a specific model: /models/ant/?model=ant-08b
+    var requested = new URLSearchParams(window.location.search).get('model')
+    if (requested && tabs.some(function (tab) { return tab.getAttribute('data-model') === requested })) {
+      select(requested)
+    }
   }
+
+  /* ------------------------------------------------------ family filter */
+
+  var familyTabs = Array.prototype.slice.call(document.querySelectorAll('.tab[data-family]'))
+  var familyLists = Array.prototype.slice.call(document.querySelectorAll('[data-family-list]'))
+
+  familyTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var family = tab.getAttribute('data-family')
+
+      familyTabs.forEach(function (other) {
+        var on = other === tab
+        other.classList.toggle('is-active', on)
+        other.setAttribute('aria-selected', on ? 'true' : 'false')
+      })
+
+      familyLists.forEach(function (list) {
+        list.classList.toggle('is-active', list.getAttribute('data-family-list') === family)
+      })
+    })
+  })
 
   /* ---------------------------------------------------------- entrances */
 

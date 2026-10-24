@@ -54,6 +54,7 @@ async function main() {
     .sort()
 
   const layout = await readFile(path.join(sourceDir, '_layout.html'), 'utf8')
+  const indexLayout = await readFile(path.join(sourceDir, '_index.html'), 'utf8')
 
   await mkdir(outDir, { recursive: true })
 
@@ -81,22 +82,65 @@ async function main() {
       testEce: Number(data.test_ece || 0),
       oodEce: Number(data.ood_ece || 0),
       order: Number(data.order || 99),
+      family: data.family || 'ANT',
+      familySlug: data.family_slug || 'ant',
+      familySummary: data.family_summary || '',
+      type: data.type || 'decision',
     })
   }
 
   models.sort((a, b) => a.order - b.order)
 
-  const page = fill(layout, {
-    tabs: models.map((model, index) => renderTab(model, index)).join('\n          '),
-    panels: models.map((model, index) => renderPanel(model, index, models)).join('\n          '),
-  })
+  // One page per family: /models/<family>/ holds the full family detail.
+  const families = new Map()
+  for (const model of models) {
+    if (!families.has(model.familySlug)) families.set(model.familySlug, [])
+    families.get(model.familySlug).push(model)
+  }
 
-  await writeFile(path.join(outDir, 'index.html'), page, 'utf8')
+  for (const [slug, members] of families) {
+    const page = fill(layout, {
+      tabs: members.map((model, index) => renderTab(model, index)).join('\n          '),
+      panels: members.map((model, index) => renderPanel(model, index, members)).join('\n          '),
+    })
+    await mkdir(path.join(outDir, slug), { recursive: true })
+    await writeFile(path.join(outDir, slug, 'index.html'), page, 'utf8')
+  }
 
-  console.log(`[models] built ${models.length} model(s) → public/models/index.html`)
+  // The directory at /models/: one row per family, filtered by family type.
+  await writeFile(
+    path.join(outDir, 'index.html'),
+    fill(indexLayout, { cards: [...families].map(([, members]) => renderCard(members)).join('\n          ') }),
+    'utf8',
+  )
+
+  console.log(
+    `[models] built ${models.length} model(s) in ${families.size} famil(y/ies) → /models/ and /models/<family>/`,
+  )
 }
 
 /* ------------------------------------------------------------------ steps */
+
+function renderCard(members) {
+  const first = members[0]
+  const typeLabel = first.type === 'decision' ? 'Decision models' : `${first.type.toUpperCase()} models`
+  const names = members.map((model) => model.name)
+  const list =
+    names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0]
+  const summary = members.find((model) => model.familySummary)?.familySummary || ''
+
+  return `<a class="family-card" href="/models/${first.familySlug}/">
+            <div class="family-card-head">
+              <span class="family-card-type" data-reveal>${escapeHtml(typeLabel)}</span>
+              <h2 class="family-card-name" data-reveal style="--reveal-delay: 60ms">${escapeHtml(first.family)} family</h2>
+              <p class="family-card-members" data-reveal style="--reveal-delay: 120ms">${escapeHtml(list)}</p>
+            </div>
+            <div class="family-card-body">
+              <p class="family-card-summary" data-reveal style="--reveal-delay: 180ms">${escapeHtml(summary)}</p>
+              <span class="family-card-cta" data-reveal style="--reveal-delay: 240ms">Open the ${escapeHtml(first.family)} family <span aria-hidden="true">→</span></span>
+            </div>
+          </a>`
+}
 
 function renderTab(model, index) {
   const active = index === 0 ? ' is-active' : ''
