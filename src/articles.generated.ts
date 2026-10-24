@@ -17,6 +17,15 @@ export type Article = {
 /** Published articles, newest first. Consumed by the landing page. */
 export const articles: Article[] = [
   {
+    slug: "building-ant-4b-and-ant-08b",
+    title: "Building ANT-4B and ANT-08B",
+    summary: "The development log of two open-source System 1 decision models: what the numbers look like, what broke on the way to a laptop, and what is still open.",
+    date: "2026-10-24",
+    displayDate: "24 Oct 2026",
+    readingMinutes: 9,
+    href: "/articles/building-ant-4b-and-ant-08b.html",
+  },
+  {
     slug: "system-one-models",
     title: "What are System 1 models?",
     summary: "TypeSafe's Jev and the open-source Laya are two models in a class that returns typed decisions.",
