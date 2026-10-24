@@ -39,6 +39,7 @@ function App() {
 
         <nav aria-label="Main navigation">
           <a href="#lab">Lab</a>
+          <a href="/models/">Models</a>
           <a href="#about">About</a>
           <a href="/articles/">Articles</a>
         </nav>
@@ -75,9 +76,13 @@ function App() {
                 <span className="micro-label">Focus</span>
                 <p>System 1 models</p>
               </div>
-              <div className="panel-arrow" aria-hidden="true">
+              <a
+                className="panel-arrow"
+                href="/models/"
+                aria-label="See the ANT models (opens the model gallery)"
+              >
                 <ArrowIcon />
-              </div>
+              </a>
             </div>
           </div>
 

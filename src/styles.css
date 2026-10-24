@@ -358,6 +358,16 @@ a:focus-visible {
   border: 1px solid var(--line-strong);
   border-radius: 50%;
   color: var(--cream);
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.panel-arrow:hover {
+  border-color: var(--peach);
+  color: var(--peach);
+}
+
+.panel-arrow:hover svg {
+  transform: translateX(3px);
 }
 
 .hero-index {
