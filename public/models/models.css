@@ -680,6 +680,10 @@ html:not(.js) .model-panel {
   background: #f7f7f5;
 }
 
+.plate--dark img {
+  background: var(--surface);
+}
+
 .plate figcaption {
   max-width: 52ch;
   margin-top: 16px;

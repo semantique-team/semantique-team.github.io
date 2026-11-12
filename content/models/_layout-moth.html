@@ -165,17 +165,18 @@
           </div>
         </div>
 
-        <figure class="plate" data-reveal>
+        <figure class="plate plate--dark" data-reveal>
           <img
             src="/img/charts/07-moth-wer.png"
             width="1910"
-            height="771"
+            height="758"
             loading="lazy"
             alt="Bar chart of word error rate for Moth 0.8.1: 24.08 on the 600-clip mixed test, 20.98 for speaker S1, 26.32 for S2, 24.96 for held-out S3, 20.16 on FLEURS-IT and 49.81 on FLEURS-EN."
           />
           <figcaption>
-            Word error rate on the published int8 model. S3 is the only speaker
-            with no audio in training; FLEURS-EN is a check, not the use case.
+            Word error rate on the published int8 model; lower is better. S3 is
+            the only speaker with no audio in training; FLEURS-EN is a check, not
+            the use case.
           </figcaption>
         </figure>
 
@@ -236,18 +237,18 @@
         </div>
 
         <div class="figure-split">
-          <figure class="plate" data-reveal>
+          <figure class="plate plate--dark" data-reveal>
             <img
               src="/img/charts/09-moth-noise.png"
-              width="1547"
-              height="717"
+              width="1398"
+              height="662"
               loading="lazy"
               alt="Line chart of word error rate on a controlled noise curve for Moth 0.8.1: 20.03 clean, 21.22 at 30 dB, 24.28 at 20 dB, 27.67 at 15 dB, 33.79 at 10 dB and 40.41 at 5 dB."
             />
             <figcaption>
               Measured with the fp32 checkpoint and the 0.8.1 trigram LM: 100 clips
               from S3 on the same noise pool used in training. The int8 path was not
-              re-measured.
+              re-measured; lower is better.
             </figcaption>
           </figure>
 
@@ -292,17 +293,18 @@
         </div>
 
         <div class="figure-split">
-          <figure class="plate" data-reveal>
+          <figure class="plate plate--dark" data-reveal>
             <img
               src="/img/charts/08-moth-rare-terms.png"
-              width="1815"
-              height="740"
+              width="1591"
+              height="662"
               loading="lazy"
               alt="Two bar charts of rare-term reads across Moth 0.7.0, 0.8.0 and 0.8.1: aligned ETA rises from 22.2 to 28.4 to 46.9 percent, and rare terms present from 8/47 to 11/47 to 24/47."
             />
             <figcaption>
-              Rare-term reads across the three published int8 releases. 0.8.1
-              changes only the trigram LM; the acoustic graph is the same as 0.8.0.
+              Rare-term reads across the three published int8 releases; higher is
+              better. 0.8.1 changes only the trigram LM; the acoustic graph is the
+              same as 0.8.0.
             </figcaption>
           </figure>
 
