@@ -177,6 +177,25 @@ img {
   margin-top: 38px;
 }
 
+.model-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.moth-mark {
+  display: block;
+  width: 30px;
+  height: 30px;
+  opacity: 0.92;
+}
+
 .button {
   display: inline-flex;
   min-height: 46px;
@@ -840,6 +859,10 @@ html:not(.js) .model-panel {
   background: #f7f7f5;
 }
 
+.stage-plate--dark {
+  background: var(--surface);
+}
+
 .stage-plate img {
   display: block;
   width: 100%;
@@ -1149,6 +1172,17 @@ html:not(.js) [data-reveal] {
     align-items: flex-start;
     flex-direction: column;
     gap: 18px;
+  }
+
+  .model-eyebrow {
+    gap: 10px;
+    margin-bottom: 18px;
+    font-size: 9px;
+  }
+
+  .moth-mark {
+    width: 26px;
+    height: 26px;
   }
 
   .decision {
