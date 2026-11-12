@@ -21,6 +21,7 @@
   --quiet: #8f9086;
   --peach: #e7b99c;
   --peach-deep: #d3a184;
+  --cream: #f0debd;
   --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
   --shell: min(1160px, calc(100% - 64px));
 
@@ -154,6 +155,11 @@ img {
   font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 1;
+}
+
+.hero h1 em {
+  color: var(--peach);
+  font-style: normal;
 }
 
 .hero-lead {
@@ -332,6 +338,72 @@ img {
   line-height: 1.55;
 }
 
+/* ---------------------------------------------------- transcript (interface) */
+
+.transcript {
+  padding: 26px 24px 24px;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.transcript-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.transcript-model {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.transcript-state {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.wave {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 2px 0 8px;
+}
+
+.transcript-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.transcript-text {
+  margin: 20px 0 0;
+  color: var(--text);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.transcript-text .en,
+.sample-text .en {
+  color: var(--cream);
+}
+
+.transcript-note {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 /* --------------------------------------------------------------- sections */
 
 .models-section,
@@ -478,6 +550,10 @@ html:not(.js) .model-panel {
   line-height: 1.65;
 }
 
+.panel-body p + p {
+  margin-top: 14px;
+}
+
 .panel-links {
   display: flex;
   flex-wrap: wrap;
@@ -561,6 +637,31 @@ html:not(.js) .model-panel {
   color: var(--quiet);
 }
 
+.stt-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 18px;
+  margin-top: 34px;
+}
+
+.stat-value {
+  display: block;
+  color: var(--text);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 /* ---------------------------------------------------------------- plates */
 
 .figure-row {
@@ -623,6 +724,67 @@ html:not(.js) .model-panel {
   color: var(--muted);
   font-size: 16px;
   line-height: 1.65;
+}
+
+.limits p + p {
+  margin-top: 14px;
+}
+
+/* ------------------------------------------------------- samples and package */
+
+.sample-panel {
+  margin-top: 56px;
+  padding: 28px 26px;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.sample-text {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.4;
+}
+
+.sample-note {
+  max-width: 62ch;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.package-panel {
+  padding: 28px 26px;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.package-panel h3 {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.package-list .spec {
+  padding-block: 7px;
+}
+
+.package-list dt {
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.package-total {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 /* ------------------------------------------------------- how it works */
@@ -810,6 +972,13 @@ html:not(.js) .model-panel {
   line-height: 1.6;
 }
 
+.cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+}
+
 /* --------------------------------------------------------------- footer */
 
 .site-footer {
@@ -841,6 +1010,11 @@ html:not(.js) .model-panel {
 }
 
 /* ---------------------------------------------------------------- motion */
+
+html:not(.js) [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   [data-reveal] {
@@ -891,6 +1065,10 @@ html:not(.js) .model-panel {
   }
 
   .decision {
+    max-width: 560px;
+  }
+
+  .transcript {
     max-width: 560px;
   }
 
@@ -973,6 +1151,23 @@ html:not(.js) .model-panel {
     padding: 22px 18px 20px;
   }
 
+  .transcript {
+    padding: 22px 18px 20px;
+  }
+
+  .stt-stats {
+    gap: 18px 14px;
+  }
+
+  .stat-value {
+    font-size: 26px;
+  }
+
+  .sample-panel,
+  .package-panel {
+    padding: 22px 18px;
+  }
+
   .decision-candidates li {
     grid-template-columns: 1fr 54px 48px;
     gap: 10px;
@@ -1043,6 +1238,12 @@ html:not(.js) .model-panel {
 
   .cta-sentence {
     font-size: 18px;
+  }
+
+  .cta-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
   }
 
   .site-footer {

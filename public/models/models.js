@@ -116,8 +116,9 @@
           steps.forEach(function (el) {
             el.classList.toggle('is-active', el === entry.target)
           })
-          if (caption && captions[step]) {
-            caption.textContent = captions[step]
+          var text = entry.target.getAttribute('data-caption') || captions[step]
+          if (caption && text) {
+            caption.textContent = text
           }
         })
       },

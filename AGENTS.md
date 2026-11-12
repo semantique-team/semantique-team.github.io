@@ -17,7 +17,7 @@ built with React + TypeScript + Vite. Deployed to GitHub Pages from `main` via
 | `src/articles.generated.ts` | **Generated** article manifest (do not edit) |
 | `content/articles/*.md` | Article sources (Markdown + frontmatter) |
 | `content/models/*.md` | Model page sources (Markdown + frontmatter) |
-| `content/**/_layout.html`, `_index*.html` | HTML templates for the generators |
+| `content/**/_layout*.html`, `_index*.html` | HTML templates for the generators |
 | `scripts/build-articles.mjs`, `scripts/build-models.mjs` | The generators |
 | `public/articles/article.css` | Single stylesheet for all article pages |
 | `public/models/models.css`, `public/models/models.js` | Styles and behaviour for `/models/` |
@@ -188,11 +188,15 @@ articles` regenerates the page, the `/articles/` index and
 **Models** — `content/models/<slug>.md` with the frontmatter documented in
 `README.md` (family, tagline, metrics, repo, …). `npm run models` regenerates
 the `/models/` directory and one page per family from
-`content/models/_layout.html`. Metrics come from the model repos'
-`runs/*/metrics.json`; never round or invent numbers.
+`content/models/_layout-<family_slug>.html` or the shared
+`content/models/_layout.html`. Metrics come from the model repos' published
+artifacts (`runs/*/metrics.json` for ANT; `runs/E-031/MODEL_CARD.md` and
+`runs/E-031/release-0.8.1.json` for Moth); never round or invent numbers.
 
-Template changes go in `content/**/_layout*.html` and affect every generated
-page at once — that is the intended leverage point.
+Template changes go in `content/**/_layout*.html`. A family can override the
+shared `content/models/_layout.html` with `content/models/_layout-<family_slug>.html`
+(Moth uses `_layout-moth.html`); every frontmatter field is available in that
+layout as `{{field}}`. That is the intended leverage point.
 
 ## Commit style
 

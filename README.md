@@ -80,12 +80,20 @@ The longer description of the model.
 `npm run models` writes two things from that Markdown:
 
 - `public/models/index.html` — the directory at `/models/`, one row per family,
-  filtered by type (decision models now, speech-to-text next), from
+  filtered by type (decision models and speech-to-text), from
   `content/models/_index.html`;
 - `public/models/<family_slug>/index.html` — the family page, from
-  `content/models/_layout.html`. `/models/ant/` holds the model switcher, the
-  numbers, the charts, how a decision is made and how to run it. A directory row
-  can open one model directly with `?model=ant-08b`.
+  `content/models/_layout-<family_slug>.html` when that file exists, otherwise
+  from `content/models/_layout.html`. `/models/ant/` holds the model switcher,
+  the numbers, the charts, how a decision is made and how to run it. A directory
+  row can open one model directly with `?model=ant-08b`. `/models/moth/` is a
+  single-model STT page with its own layout.
+
+Every frontmatter field is available inside a family layout as `{{field}}`
+(for example `{{summary}}`, `{{repo}}` or a custom metric), so a family layout
+can stay data-driven without duplicating the Markdown. Moth adds STT-specific
+fields such as `weights`, `demo`, `card`, `wer_t600` and `rare_eta`, which
+`_layout-moth.html` reads directly.
 
 Both are styled by `public/models/models.css` and behave with
 `public/models/models.js`: the filters, the model switcher, the section entrances
@@ -93,5 +101,7 @@ and the diagram caption. Without JavaScript both lists and every model still
 show, one after the other.
 
 The numbers come from the model repositories themselves (`runs/*/metrics.json`
-in `semantique-team/ant-4b` and `semantique-team/ant-08b`); the charts and the
-playground screenshot are copied into `public/img/`.
+in `semantique-team/ant-4b` and `semantique-team/ant-08b`;
+`runs/E-031/MODEL_CARD.md` and `runs/E-031/release-0.8.1.json` in
+`semantique-team/moth-stt`). The charts are generated from those published
+numbers and copied into `public/img/`.

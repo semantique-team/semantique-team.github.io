@@ -29,6 +29,10 @@
  *
  * The body is the longer description of the model, shown under the summary.
  *
+ * A family can override the shared `_layout.html` with
+ * `_layout-<family_slug>.html`; every frontmatter field is available to that
+ * layout as `{{field}}`.
+ *
  * Runs automatically before `npm run dev` and `npm run build` (see package.json).
  */
 
@@ -53,7 +57,7 @@ async function main() {
     .filter((name) => name.endsWith('.md') && !name.startsWith('_'))
     .sort()
 
-  const layout = await readFile(path.join(sourceDir, '_layout.html'), 'utf8')
+  const defaultLayout = await readFile(path.join(sourceDir, '_layout.html'), 'utf8')
   const indexLayout = await readFile(path.join(sourceDir, '_index.html'), 'utf8')
 
   await mkdir(outDir, { recursive: true })
@@ -86,6 +90,7 @@ async function main() {
       familySlug: data.family_slug || 'ant',
       familySummary: data.family_summary || '',
       type: data.type || 'decision',
+      raw: data,
     })
   }
 
@@ -99,18 +104,35 @@ async function main() {
   }
 
   for (const [slug, members] of families) {
-    const page = fill(layout, {
+    const familyLayout = await readFamilyLayout(slug, defaultLayout)
+    const primary = members[0]
+    const page = fill(familyLayout, {
       tabs: members.map((model, index) => renderTab(model, index)).join('\n          '),
       panels: members.map((model, index) => renderPanel(model, index, members)).join('\n          '),
+      model_count: String(members.length),
+      family_name: primary.family,
+      body: primary.body,
+      ...Object.fromEntries(
+        Object.entries(primary.raw).map(([key, value]) => [key, escapeHtml(value)]),
+      ),
     })
     await mkdir(path.join(outDir, slug), { recursive: true })
     await writeFile(path.join(outDir, slug, 'index.html'), page, 'utf8')
   }
 
   // The directory at /models/: one row per family, filtered by family type.
+  const familiesByType = new Map()
+  for (const [, members] of families) {
+    const type = members[0].type
+    if (!familiesByType.has(type)) familiesByType.set(type, [])
+    familiesByType.get(type).push(members)
+  }
+  const cardsFor = (type) =>
+    (familiesByType.get(type) || []).map((members) => renderCard(members)).join('\n          ')
+
   await writeFile(
     path.join(outDir, 'index.html'),
-    fill(indexLayout, { cards: [...families].map(([, members]) => renderCard(members)).join('\n          ') }),
+    fill(indexLayout, { cards: cardsFor('decision'), stt_cards: cardsFor('stt') }),
     'utf8',
   )
 
@@ -119,11 +141,21 @@ async function main() {
   )
 }
 
+async function readFamilyLayout(slug, fallback) {
+  try {
+    return await readFile(path.join(sourceDir, `_layout-${slug}.html`), 'utf8')
+  } catch (error) {
+    if (error.code === 'ENOENT') return fallback
+    throw error
+  }
+}
+
 /* ------------------------------------------------------------------ steps */
 
 function renderCard(members) {
   const first = members[0]
-  const typeLabel = first.type === 'decision' ? 'Decision models' : `${first.type.toUpperCase()} models`
+  const typeLabels = { decision: 'Decision models', stt: 'Speech-to-text models' }
+  const typeLabel = typeLabels[first.type] || `${first.type.toUpperCase()} models`
   const names = members.map((model) => model.name)
   const list =
     names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0]

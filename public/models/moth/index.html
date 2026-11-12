@@ -1,0 +1,502 @@
+<!doctype html>
+<!-- GENERATED FILE — do not edit. Source of truth: content/models/moth.md -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0d0b" />
+    <meta name="description" content="Moth is a 19.7 MB Italian + English code-switching speech-to-text model from Semantique. It runs in a browser tab, on CPU, with 11.6M parameters." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Moth — Semantique" />
+    <meta property="og:description" content="Moth is a 19.7 MB Italian + English code-switching speech-to-text model from Semantique. It runs in a browser tab, on CPU, with 11.6M parameters." />
+    <meta property="og:site_name" content="Semantique" />
+    <link rel="stylesheet" href="/models/models.css" />
+    <title>Moth — Semantique</title>
+    <script>document.documentElement.classList.add('js')</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Semantique home">
+        <img src="/logo.svg" alt="Semantique" />
+      </a>
+      <nav aria-label="Site navigation">
+        <a href="/">Lab</a>
+        <a href="/articles/">Articles</a>
+        <a href="/models/" aria-current="page">Models</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero page-shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">Moth,<br /><em>in the browser.</em></h1>
+          <p class="hero-lead">
+            An 11.6-million-parameter speech-to-text model for Italian with English
+            terms inside it. It packs into 19.7 MB and transcribes on a CPU, in a
+            tab, with the audio never leaving the machine.
+          </p>
+          <div class="hero-actions" data-reveal>
+            <a class="button" href="https://semantique-team-moth-demo.static.hf.space">Try the live demo</a>
+            <a class="text-link" href="#numbers">See the numbers</a>
+          </div>
+        </div>
+
+        <div class="transcript" data-reveal style="--reveal-delay: 130ms">
+          <div class="transcript-head">
+            <span class="transcript-model">Moth 0.8.1</span>
+            <span class="transcript-state">held-out speaker</span>
+          </div>
+          <img
+            class="wave"
+            src="/img/moth-wave.svg"
+            width="522"
+            height="84"
+            alt=""
+          />
+          <div class="transcript-meta">
+            <span>T-0246</span>
+            <span>2.2 s</span>
+            <span>S3</span>
+          </div>
+          <p class="transcript-text">
+            la <span class="en">sprint review</span> è venerdì
+          </p>
+          <p class="transcript-note">
+            The model's output, verbatim. S3 contributed no audio to training.
+            Lowercase and unpunctuated because that is the model, not a rendering
+            choice.
+          </p>
+        </div>
+      </section>
+
+      <section class="models-section page-shell" id="model" aria-labelledby="model-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="model-title">What it is</h2>
+            <p class="section-lead">
+              A CTC model built on a Whisper-tiny encoder. It keeps the acoustic
+              half, drops the decoder, and adds two transformer blocks and a linear
+              CTC head over one shared Italian and English vocabulary.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>At a glance</h3>
+            <ul class="shared-list">
+              <li>Whisper-tiny encoder, two extra transformer blocks, one linear CTC head.</li>
+              <li>11,575,169 parameters in an 11.9 MB int8 graph; 19.7 MB for the whole package.</li>
+              <li>80-bin log-mel at 16 kHz, 30 seconds per pass, no streaming.</li>
+              <li>Silero VAD in the loop: silence and steady noise produce no words.</li>
+              <li>About 47× real time on four threads, 25× on one, on an Apple M5.</li>
+              <li>Apache-2.0. Initial encoder weights from openai/whisper-tiny (MIT).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="model-panels" data-reveal>
+          <div class="model-panel is-active">
+            <div class="panel-copy">
+              <h3 class="panel-name">
+                Moth 0.8.1
+                <span class="panel-tagline">Italian speech, English terms, one small package</span>
+              </h3>
+              <p class="panel-summary">Moth is a CTC speech-to-text model for the way Italians actually talk: Italian sentences with English words and phrases inside them. It is built on a Whisper-tiny encoder, ships as a 19.7 MB package, and transcribes in the browser through ONNX Runtime Web.</p>
+              <div class="panel-body"><p>The package contains the whole model runtime: an 11.9 MB int8 ONNX graph, a
+5.4 MB trigram language model, a 2.3 MB Silero VAD, the vocabulary and the mel
+filterbank. No PyTorch, no Python, no server. The browser path is ONNX Runtime
+Web over WASM, and the audio never leaves the tab.</p>
+<p>It is record-then-transcribe, not streaming. It writes lowercase text without
+punctuation and spells numbers out. Pure English is not the use case; the model
+is for Italian speech with English terms embedded in it.</p></div>
+              <p class="panel-links">
+                <a class="text-link" href="https://huggingface.co/semantique-team/moth-stt">Model card and weights</a>
+                <a class="text-link" href="https://github.com/semantique-team/moth-stt">Repository</a>
+                <a class="text-link" href="https://semantique-team-moth-demo.static.hf.space">Live demo</a>
+              </p>
+            </div>
+            <div class="panel-side">
+              <dl class="spec-list">
+                <div class="spec"><dt>Backbone</dt><dd>Whisper-tiny encoder + 2 blocks</dd></div>
+                <div class="spec"><dt>Parameters</dt><dd>11,575,169</dd></div>
+                <div class="spec"><dt>Package</dt><dd>19.7 MB</dd></div>
+                <div class="spec"><dt>Checkpoint</dt><dd>moth-stt-0.8.1</dd></div>
+                <div class="spec"><dt>Licence</dt><dd>Apache-2.0</dd></div>
+                <div class="spec"><dt>Status</dt><dd>Published 2026-11-12</dd></div>
+                <div class="spec"><dt>Decoding</dt><dd>beam 12 · LM 0.55</dd></div>
+              </dl>
+              <div class="stt-stats">
+                <div class="stat">
+                  <span class="stat-value">24.08</span>
+                  <span class="stat-label">WER, mixed test, 600 clips</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">24.96</span>
+                  <span class="stat-label">WER, held-out speaker, 200 clips</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">55.23</span>
+                  <span class="stat-label">ETA, mixed test, %</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">46.9%</span>
+                  <span class="stat-label">Rare-term ETA, 81 occurrences</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="models-section page-shell" id="numbers" aria-labelledby="numbers-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="numbers-title">The numbers</h2>
+            <p class="section-lead">
+              All figures are normalized WER and ETA on the published int8 model,
+              decoded with beam 12, top-k 10, LM weight 0.55 and token bonus 2.7.
+              Lower WER is better; ETA is the share of annotated English-origin
+              words reproduced exactly.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>Read the split, not just the total</h3>
+            <ul class="shared-list">
+              <li>400 of the 600 mixed-test clips come from voices heard in training.</li>
+              <li>S3, the only held-out voice, is the honest speaker number: 24.96 WER.</li>
+              <li>FLEURS-EN is a check, not a use case: 49.81 WER on pure English.</li>
+              <li>The test sets are reused read speech, not a fresh natural mixed-dev.</li>
+            </ul>
+          </div>
+        </div>
+
+        <figure class="plate" data-reveal>
+          <img
+            src="/img/charts/07-moth-wer.png"
+            width="1910"
+            height="771"
+            loading="lazy"
+            alt="Bar chart of word error rate for Moth 0.8.1: 24.08 on the 600-clip mixed test, 20.98 for speaker S1, 26.32 for S2, 24.96 for held-out S3, 20.16 on FLEURS-IT and 49.81 on FLEURS-EN."
+          />
+          <figcaption>
+            Word error rate on the published int8 model. S3 is the only speaker
+            with no audio in training; FLEURS-EN is a check, not the use case.
+          </figcaption>
+        </figure>
+
+        <div class="figure-split">
+          <div class="limits" data-reveal>
+            <h3>Where it still fails</h3>
+            <ul>
+              <li>
+                Pure English is weak: 49.81 WER on FLEURS-EN. This is a
+                code-switching model, not a bilingual one.
+              </li>
+              <li>
+                No punctuation, no casing, no formatting. Numbers are spelled out
+                in Italian.
+              </li>
+              <li>
+                Speaker coverage is three people. S1 and S2 are training voices;
+                S3 is the only held-out voice, and it shares a recording setup with
+                S1.
+              </li>
+              <li>
+                Music can produce words. The VAD stops silence and steady noise,
+                not music.
+              </li>
+            </ul>
+          </div>
+          <div class="limits" data-reveal style="--reveal-delay: 110ms">
+            <h3>What the output is not</h3>
+            <ul>
+              <li>It does not stream: one clip at a time, up to 30 seconds per pass.</li>
+              <li>It does not translate, summarise or punctuate.</li>
+              <li>It does not return probabilities; it returns text.</li>
+              <li>It does not try to be a general multilingual model.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-section page-shell" id="noise" aria-labelledby="noise-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="noise-title">Noise</h2>
+            <p class="section-lead">
+              The 0.7.0 recipe heard half of its Italian read speech through noise.
+              That is where the noise robustness came from. 0.8.1 keeps the 0.8.0
+              acoustic graph and changes only the language model.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>What the curve says</h3>
+            <ul class="shared-list">
+              <li>On the training noise pool, 15 dB is 27.67 WER and 10 dB is 33.79.</li>
+              <li>The mean from 5 to 30 dB is 29.47 WER for 0.8.1.</li>
+              <li>Every condition is a statistical tie with 0.8.0: the LM changed, not the acoustics.</li>
+              <li>One room, one take, steady ambience. Not a promise about every café or car.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="figure-split">
+          <figure class="plate" data-reveal>
+            <img
+              src="/img/charts/09-moth-noise.png"
+              width="1547"
+              height="717"
+              loading="lazy"
+              alt="Line chart of word error rate on a controlled noise curve for Moth 0.8.1: 20.03 clean, 21.22 at 30 dB, 24.28 at 20 dB, 27.67 at 15 dB, 33.79 at 10 dB and 40.41 at 5 dB."
+            />
+            <figcaption>
+              Measured with the fp32 checkpoint and the 0.8.1 trigram LM: 100 clips
+              from S3 on the same noise pool used in training. The int8 path was not
+              re-measured.
+            </figcaption>
+          </figure>
+
+          <div class="limits" data-reveal style="--reveal-delay: 110ms">
+            <h3>What the 0.7.0 change bought</h3>
+            <p>
+              On the controlled fp32 curve, 0.7.0 gained 6.3 WER points at 15 dB and
+              11.5 at 10 dB over 0.6.0; clean performance was a statistical tie.
+              On a room recorded after training the gain was larger — 11.2 points
+              at 15 dB and 18.3 at 10 dB — because the room is harsher and the
+              baseline falls further.
+            </p>
+            <p>
+              What it does not cover: one room, one take, steady ambience, a
+              synthetic signal-to-noise ratio. The 0.8.1 curve is the same-pool
+              measurement, not the unseen-room one.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-section page-shell" id="english" aria-labelledby="english-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="english-title">The English words</h2>
+            <p class="section-lead">
+              The headline WER hides the part the model is for: the English terms
+              inside Italian. 0.8.1 rebuilt the language model around them, without
+              touching the acoustic graph.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>What changed in 0.8.1</h3>
+            <ul class="shared-list">
+              <li>The trigram LM was rebuilt from a frozen training-side corpus, keeping every bigram and repeating term-containing sentences three times.</li>
+              <li>Rare aligned ETA: 28.4% → 46.9% (23/81 → 38/81).</li>
+              <li>Rare presence: 11/47 → 24/47.</li>
+              <li>T-600: 24.71 → 24.08 WER, 54.17 → 55.23 ETA.</li>
+              <li>Natural-term presence: 432/817, two above the pre-registered gate of 431.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="figure-split">
+          <figure class="plate" data-reveal>
+            <img
+              src="/img/charts/08-moth-rare-terms.png"
+              width="1815"
+              height="740"
+              loading="lazy"
+              alt="Two bar charts of rare-term reads across Moth 0.7.0, 0.8.0 and 0.8.1: aligned ETA rises from 22.2 to 28.4 to 46.9 percent, and rare terms present from 8/47 to 11/47 to 24/47."
+            />
+            <figcaption>
+              Rare-term reads across the three published int8 releases. 0.8.1
+              changes only the trigram LM; the acoustic graph is the same as 0.8.0.
+            </figcaption>
+          </figure>
+
+          <div class="limits" data-reveal style="--reveal-delay: 110ms">
+            <h3>What the gain costs</h3>
+            <p>
+              The LM prior helps the rare terms, but natural-term presence falls
+              from 436/817 to 432/817: the gain is partly bought with common-term
+              robustness. The 16-term gold check stays 19/27. The acoustic weights
+              did not change, so this is a decode-side trade, not a new model.
+            </p>
+            <p>
+              Rare WER improves from 35.9% to 28.2%. The pre-registered primary gate
+              was 30% rare aligned ETA; 0.8.1 reaches 46.9%.
+            </p>
+          </div>
+        </div>
+
+        <div class="sample-panel" data-reveal>
+          <p class="sample-text">
+            facciamo una <span class="en">call</span> su <span class="en">zoom</span>
+          </p>
+          <p class="sample-note">
+            A verbatim output on a test clip: T-0263, 1.7 s, S2. Lowercase, no
+            punctuation, exactly what the model returns.
+          </p>
+        </div>
+      </section>
+
+      <section class="how-section page-shell" id="how" aria-labelledby="how-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="how-title">How it works</h2>
+            <p class="section-lead">
+              No neural decoder, no language token, no generation loop. The encoder
+              sees the audio, the CTC head emits one distribution per frame, and the
+              decoder turns that into words.
+            </p>
+          </div>
+        </div>
+
+        <div class="how-grid">
+          <div class="how-steps" data-reveal>
+            <div
+              class="how-step"
+              data-step="front-end"
+              data-caption="Front-end: 80-bin log-mel at 100 frames a second."
+            >
+              <h3>Listen at 50 frames a second.</h3>
+              <p>
+                The front-end is Whisper's: 80-bin log-mel at 16 kHz, a 25 ms window
+                and a 10 ms hop. Two convolutions take the sequence to 50 frames per
+                second.
+              </p>
+            </div>
+            <div
+              class="how-step"
+              data-step="encode"
+              data-caption="Acoustic model: four Whisper-tiny blocks plus two extra blocks, width 384."
+            >
+              <h3>Encode, then score every frame.</h3>
+              <p>
+                Four pretrained Whisper-tiny blocks and two extra transformer blocks
+                share one 384-wide stream. A linear head projects each frame to
+                1,025 CTC tokens: blank plus a 1,024-piece Italian and English BPE.
+              </p>
+            </div>
+            <div
+              class="how-step"
+              data-step="decode"
+              data-caption="Decode: prefix beam search, a trigram LM and a per-token bonus."
+            >
+              <h3>Search the words, not the text.</h3>
+              <p>
+                Prefix beam search with beam 12, top-k 10, a trigram LM at weight
+                0.55 and a per-token bonus of 2.7. The bonus is not optional: without
+                it the beam under-emits and deletes words.
+              </p>
+            </div>
+          </div>
+
+          <div class="how-stage" data-reveal style="--reveal-delay: 120ms">
+            <div class="stage-plate">
+              <img
+                src="/img/moth-architecture.svg"
+                width="1000"
+                height="680"
+                loading="lazy"
+                alt="Diagram of Moth's path: 16 kHz audio to 80-bin log-mel, through four Whisper-tiny blocks and two extra transformer blocks, a linear CTC head over 1,025 tokens, then prefix beam search with a trigram language model to lowercase text. A Silero VAD guards silence and steady noise."
+              />
+            </div>
+            <p class="stage-caption">
+              <span data-stage-caption>Front-end: 80-bin log-mel at 100 frames a second.</span>
+              <a class="text-link" href="https://huggingface.co/semantique-team/moth-stt">Full model card</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="how-code" data-reveal>
+          <pre><code>import soundfile as sf
+from stt.onnx_runner import ReleaseMoth
+
+runtime = ReleaseMoth("release")
+audio, sample_rate = sf.read("speech.wav", dtype="float32")
+text, seconds = runtime.transcribe(audio, sample_rate=sample_rate)</code></pre>
+          <div class="code-output">
+            <h3>What comes back</h3>
+            <p>
+              A lowercase, unpunctuated transcript and the wall-clock seconds. The
+              input is mono 16 kHz PCM in [-1, 1]; there is no implicit resampling.
+              The package validates its own hashes and size at load.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="try-section page-shell" id="try" aria-labelledby="try-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="try-title">Try it</h2>
+            <p class="section-lead">
+              The live demo loads the same package through ONNX Runtime Web in the
+              tab. Model, LM and VAD download once; the recording stays local.
+              Nothing is sent to a server.
+            </p>
+          </div>
+
+          <ul class="repo-list" data-reveal style="--reveal-delay: 90ms">
+            <li>
+              <a href="https://semantique-team-moth-demo.static.hf.space">Live demo</a>
+              <span>Record or upload a clip in the browser</span>
+            </li>
+            <li>
+              <a href="https://huggingface.co/semantique-team/moth-stt">Moth weights</a>
+              <span>Model card, int8 graph, trigram LM, VAD</span>
+            </li>
+            <li>
+              <a href="https://github.com/semantique-team/moth-stt">moth-stt</a>
+              <span>Training, export and evaluation code</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="figure-split">
+          <div class="package-panel" data-reveal>
+            <h3>The model package</h3>
+            <dl class="spec-list package-list">
+              <div class="spec"><dt>model.int8.onnx</dt><dd>11.9 MB</dd></div>
+              <div class="spec"><dt>lm_bpe3.bin</dt><dd>5.4 MB</dd></div>
+              <div class="spec"><dt>silero_vad.onnx</dt><dd>2.3 MB</dd></div>
+              <div class="spec"><dt>vocab.json</dt><dd>17 KB</dd></div>
+              <div class="spec"><dt>mel_filters.bin</dt><dd>64 KB</dd></div>
+              <div class="spec"><dt>config.json</dt><dd>1.3 KB</dd></div>
+              <div class="spec"><dt>NOTICE</dt><dd>3.3 KB</dd></div>
+            </dl>
+            <p class="package-total">
+              19,706,289 bytes, 293,711 under the 20 MB ceiling.
+            </p>
+          </div>
+
+          <div class="limits" data-reveal style="--reveal-delay: 110ms">
+            <h3>What you need</h3>
+            <ul>
+              <li>Mono 16 kHz PCM in [-1, 1], one clip at a time.</li>
+              <li>A browser with WebAssembly SIMD, or any CPU with onnxruntime.</li>
+              <li>No GPU, no PyTorch, no server.</li>
+              <li>About 47× real time on four threads, 25× on one, on an M5.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-section page-shell">
+        <p class="cta-sentence" data-reveal>
+          Run a speech-to-text model where the audio already is.
+        </p>
+        <a class="button" href="https://huggingface.co/semantique-team/moth-stt" data-reveal style="--reveal-delay: 90ms">
+          Get the weights
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer page-shell">
+      <a class="footer-brand" href="/">semantique.</a>
+      <span>AI engineering lab</span>
+      <a href="#top" class="back-to-top">Back to top</a>
+    </footer>
+
+    <script src="/models/models.js"></script>
+  </body>
+</html>
