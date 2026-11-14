@@ -681,6 +681,53 @@ html:not(.js) .model-panel {
   line-height: 1.45;
 }
 
+/* ------------------------------------------------------------- next model */
+
+.upcoming {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(36px, 5vw, 72px);
+  padding: 40px;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.upcoming-name {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.upcoming-tagline {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.upcoming-summary {
+  max-width: 52ch;
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.upcoming-body p {
+  max-width: 54ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.upcoming-body p + p {
+  margin-top: 14px;
+}
+
 /* ---------------------------------------------------------------- plates */
 
 .figure-row {
@@ -1101,6 +1148,7 @@ html:not(.js) [data-reveal] {
 
   .section-head,
   .model-panel,
+  .upcoming,
   .figure-split {
     grid-template-columns: 1fr;
   }
@@ -1229,11 +1277,23 @@ html:not(.js) [data-reveal] {
     padding: 24px 18px;
   }
 
+  .upcoming {
+    padding: 24px 18px;
+  }
+
   .panel-name {
     font-size: 24px;
   }
 
+  .upcoming-name {
+    font-size: 24px;
+  }
+
   .panel-summary {
+    font-size: 16px;
+  }
+
+  .upcoming-summary {
     font-size: 16px;
   }
 
@@ -1403,6 +1463,8 @@ html:not(.js) [data-reveal] {
   background: rgb(231 185 156 / 14%);
   font-size: 14px;
   font-weight: 600;
+  letter-spacing: 0;
+  vertical-align: middle;
 }
 
 /* The filter and the two lists it drives. Without the script both lists show. */

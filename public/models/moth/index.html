@@ -50,6 +50,7 @@
           </p>
           <div class="hero-actions" data-reveal>
             <a class="button" href="https://semantique-team-moth-demo.static.hf.space">Try the live demo</a>
+            <a class="text-link" href="https://github.com/semantique-team/moth-stt/blob/main/paper/main.pdf">Read the paper</a>
             <a class="text-link" href="#numbers">See the numbers</a>
           </div>
         </div>
@@ -99,7 +100,8 @@
               <li>11,575,169 parameters in an 11.9 MB int8 graph; 19.7 MB for the whole package.</li>
               <li>80-bin log-mel at 16 kHz, 30 seconds per pass, no streaming.</li>
               <li>Silero VAD in the loop: silence and steady noise produce no words.</li>
-              <li>About 47× real time on four threads, 25× on one, on an Apple M5.</li>
+              <li>Trained on 437.7 h of open human-transcribed speech, 110 h of spliced Italian–English exposure and 50.2 min of recorded mixed speech, oversampled 50×. All of it on one 16 GB laptop, with no external compute.</li>
+              <li>A median 42× real time in headless Chromium on a desktop; 25× on a single WASM thread.</li>
               <li>Apache-2.0. Initial encoder weights from openai/whisper-tiny (MIT).</li>
             </ul>
           </div>
@@ -122,6 +124,7 @@ punctuation and spells numbers out. Pure English is not the use case; the model
 is for Italian speech with English terms embedded in it.</p></div>
               <p class="panel-links">
                 <a class="text-link" href="https://huggingface.co/semantique-team/moth-stt">Model card and weights</a>
+                <a class="text-link" href="https://github.com/semantique-team/moth-stt/blob/main/paper/main.pdf">The paper</a>
                 <a class="text-link" href="https://github.com/semantique-team/moth-stt">Repository</a>
                 <a class="text-link" href="https://semantique-team-moth-demo.static.hf.space">Live demo</a>
               </p>
@@ -174,7 +177,8 @@ is for Italian speech with English terms embedded in it.</p></div>
             <h3>Read the split, not just the total</h3>
             <ul class="shared-list">
               <li>400 of the 600 mixed-test clips come from voices heard in training.</li>
-              <li>S3, the only held-out voice, is the honest speaker number: 24.96 WER.</li>
+              <li>The three voices span 5.34 pp WER: S1 20.98, S2 26.32, S3 24.96.</li>
+              <li>S3, the only voice with no training audio, is not the worst; S2 is. The pooled number is an average over voices.</li>
               <li>FLEURS-EN is a check, not a use case: 49.81 WER on pure English.</li>
               <li>The test sets are reused read speech, not a fresh natural mixed-dev.</li>
             </ul>
@@ -187,7 +191,7 @@ is for Italian speech with English terms embedded in it.</p></div>
             width="1910"
             height="758"
             loading="lazy"
-            alt="Bar chart of word error rate for Moth 0.8.1: 24.08 on the 600-clip mixed test, 20.98 for speaker S1, 26.32 for S2, 24.96 for held-out S3, 20.16 on FLEURS-IT and 49.81 on FLEURS-EN."
+            alt="Bar chart of word error rate for Moth 0.8.1: 24.08 on the 600-clip mixed test, 20.98 for speaker S1, 26.32 for S2, 24.96 for S3, which has no training audio, 20.16 on FLEURS-IT and 49.81 on FLEURS-EN."
           />
           <figcaption>
             Word error rate on the published int8 model; lower is better. S3 is
@@ -210,8 +214,12 @@ is for Italian speech with English terms embedded in it.</p></div>
               </li>
               <li>
                 Speaker coverage is three people. S1 and S2 are training voices;
-                S3 is the only held-out voice, and it shares a recording setup with
-                S1.
+                S3 is the only voice with no training audio, and it shares a
+                recording setup with S1.
+              </li>
+              <li>
+                One training seed for the released model. The intervals are
+                utterance-level bootstrap; training variance was not measured.
               </li>
               <li>
                 Music can produce words. The VAD stops silence and steady noise,
@@ -437,6 +445,102 @@ text, seconds = runtime.transcribe(audio, sample_rate=sample_rate)</code></pre>
         </div>
       </section>
 
+      <section class="how-section page-shell" id="paper" aria-labelledby="paper-heading">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="paper-heading">The paper</h2>
+            <p class="section-lead">
+              The 0.8.1 paper is a preprint in the moth-stt repository. It reports
+              the 41-experiment development record behind the release,
+              including the interventions that were rejected, and it measures the
+              costs a single headline number hides. The largest measured gains came
+              from decoding and language-model data weighting, not new acoustic
+              weights.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>What the paper adds</h3>
+            <ul class="shared-list">
+              <li>INT8 costs 0.16 pp WER on the 3,939-clip dev set, against the same checkpoint in fp32.</li>
+              <li>The browser path costs 0.72 pp on T-600: WER / ETA 24.80 / 54.36 in Chromium against 24.08 / 55.23 in Python.</li>
+              <li>The three voices span 5.34 pp WER and 12.02 pp ETA.</li>
+              <li>Four seeds of a rejected recipe span 0.46 pp — the scale at which small acoustic differences should be read as noise.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sample-panel" data-reveal>
+          <h3 class="sample-text">Moth: A 19.7 MB Italian–English Code-Switching Speech Recognizer Built on a Pretrained Whisper-Tiny Encoder</h3>
+          <p class="sample-note">Tancredi Bosi, Semantique · November 2026 · preprint</p>
+          <p class="sample-note">
+            Moth initializes a Whisper-tiny encoder, adds two transformer blocks and
+            a linear CTC head over one shared 1,024-piece Italian and English
+            vocabulary, and drops the autoregressive decoder and the language
+            token. The paper reports the 41 experiments behind that
+            design, the 12 rejected interventions
+            (quantization-aware training, intermediate CTC, contextual bias, a
+            larger language model, conservative fine-tunes) and the deployment
+            costs: INT8, the browser path, speaker spread and seed variance.
+          </p>
+          <p class="sample-note">
+            The boundary is explicit: all code-switching quality evidence is
+            scripted read speech from three known voices, and the paper makes no
+            claim of spontaneous code-switching or unseen-speaker generalization.
+          </p>
+          <p class="panel-links">
+            <a class="text-link" href="https://github.com/semantique-team/moth-stt/blob/main/paper/main.pdf">Read the PDF</a>
+            <a class="text-link" href="https://github.com/semantique-team/moth-stt/blob/main/paper/main.tex">LaTeX source</a>
+            <a class="text-link" href="https://huggingface.co/semantique-team/moth-stt">Model card and weights</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="models-section page-shell" id="next" aria-labelledby="next-heading">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="next-heading">The next Moth</h2>
+            <p class="section-lead">
+              Moth 0.8.1 is built to a hard 20 MB ceiling. The next model is a
+              larger sibling, built to a ceiling under 50 MB, with its own
+              repository and its own paper.
+            </p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>What carries over</h3>
+            <ul class="shared-list">
+              <li>The same job: Italian speech with English terms inside it.</li>
+              <li>The same deployment: record then transcribe, on CPU and in a browser tab.</li>
+              <li>A ceiling under 50 MB, against 19.7 MB for the published release.</li>
+              <li>Links to its repository and paper will appear here when they exist.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="upcoming" data-reveal>
+            <div class="upcoming-copy">
+              <h3 class="upcoming-name">
+                Moth 50
+                <span class="badge">Coming soon</span>
+              </h3>
+              <p class="upcoming-tagline">The next Moth, with room to grow</p>
+              <p class="upcoming-summary">A larger Moth, in development: the same Italian + English speech-to-text job, built to a ceiling under 50 MB instead of the 20 MB that shaped 0.8.1.</p>
+              <div class="upcoming-body"><p>Moth 50 is the working name for the next model in the family, and it is not
+published yet. 0.8.1 had to fit in 20 MB; it uses 19,706,289 bytes. The next
+model is a separate project, built to a ceiling under 50 MB.</p>
+<p>The extra room is for capacity the current package cannot afford, not for a
+different task or a server-side deployment. There are no weights, no demo and
+no numbers yet; nothing on this page is a result.</p></div>
+            </div>
+            <div class="upcoming-side">
+              <dl class="spec-list">
+                <div class="spec"><dt>Package</dt><dd>Under 50 MB</dd></div>
+                <div class="spec"><dt>Status</dt><dd>Coming soon</dd></div>
+                <div class="spec"><dt>Release</dt><dd>Not dated</dd></div>
+              </dl>
+            </div>
+          </div>
+      </section>
+
       <section class="try-section page-shell" id="try" aria-labelledby="try-title">
         <div class="section-head">
           <div class="section-intro" data-reveal>
@@ -460,6 +564,10 @@ text, seconds = runtime.transcribe(audio, sample_rate=sample_rate)</code></pre>
             <li>
               <a href="https://github.com/semantique-team/moth-stt">moth-stt</a>
               <span>Training, export and evaluation code</span>
+            </li>
+            <li>
+              <a href="https://github.com/semantique-team/moth-stt/blob/main/paper/main.pdf">The paper</a>
+              <span>Preprint: system, data, 41 experiments and the negative results</span>
             </li>
           </ul>
         </div>
@@ -487,7 +595,7 @@ text, seconds = runtime.transcribe(audio, sample_rate=sample_rate)</code></pre>
               <li>Mono 16 kHz PCM in [-1, 1], one clip at a time.</li>
               <li>A browser with WebAssembly SIMD, or any CPU with onnxruntime.</li>
               <li>No GPU, no PyTorch, no server.</li>
-              <li>About 47× real time on four threads, 25× on one, on an M5.</li>
+              <li>A median 42× real time in headless Chromium on a desktop; 25× on one WASM thread.</li>
             </ul>
           </div>
         </div>

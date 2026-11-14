@@ -196,7 +196,9 @@ artifacts (`runs/*/metrics.json` for ANT; `runs/E-031/MODEL_CARD.md` and
 Template changes go in `content/**/_layout*.html`. A family can override the
 shared `content/models/_layout.html` with `content/models/_layout-<family_slug>.html`
 (Moth uses `_layout-moth.html`); every frontmatter field is available in that
-layout as `{{field}}`. That is the intended leverage point.
+layout as `{{field}}`. That is the intended leverage point. A model with
+`status: Coming soon` is not built into a page of its own: the family layout
+places it with `{{upcoming}}`, and the directory card marks it.
 
 ## Commit style
 

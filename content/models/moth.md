@@ -2,7 +2,7 @@
 family: Moth
 family_slug: moth
 type: stt
-family_summary: A 19.7 MB speech-to-text model for Italian speech with English terms inside it. It runs in a browser tab, on a CPU, and the audio never leaves the machine.
+family_summary: A 19.7 MB speech-to-text model for Italian speech with English terms inside it. It runs in a browser tab, on a CPU, and the audio never leaves the machine. A larger sibling, under 50 MB, is in development.
 name: Moth
 slug: moth
 tagline: Italian speech, English terms, one small package
@@ -16,14 +16,33 @@ repo: https://github.com/semantique-team/moth-stt
 weights: https://huggingface.co/semantique-team/moth-stt
 demo: https://semantique-team-moth-demo.static.hf.space
 card: https://huggingface.co/semantique-team/moth-stt
+paper: https://github.com/semantique-team/moth-stt/blob/main/paper/main.pdf
+paper_source: https://github.com/semantique-team/moth-stt/blob/main/paper/main.tex
+paper_title: "Moth: A 19.7 MB Italian–English Code-Switching Speech Recognizer Built on a Pretrained Whisper-Tiny Encoder"
+paper_author: Tancredi Bosi, Semantique
+paper_date: November 2026
+experiments: 41
+rejected_experiments: 12
+training_hours: 437.7
+spliced_hours: 110
+recorded_minutes: 50.2
 wer_t600: 24.08
 eta_t600: 55.23
+wer_s1: 20.98
+wer_s2: 26.32
 wer_s3: 24.96
 eta_s3: 51.27
 wer_fleurs_it: 20.16
 wer_fleurs_en: 49.81
 rare_eta: 46.9
 package: 19.7 MB
+browser_wer: 24.80
+browser_eta: 54.36
+browser_cost: 0.72
+int8_cost: 0.16
+voice_spread: 5.34
+voice_eta_spread: 12.02
+seed_spread: 0.46
 order: 10
 ---
 

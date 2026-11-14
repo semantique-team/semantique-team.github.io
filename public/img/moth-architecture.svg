@@ -163,9 +163,9 @@
         font-family="Manrope, 'Helvetica Neue', sans-serif">int8 ONNX graph</text>
 
   <text x="332" y="532" fill="#f0eee8" font-size="22" font-weight="600"
-        font-family="Manrope, 'Helvetica Neue', sans-serif">47×</text>
+        font-family="Manrope, 'Helvetica Neue', sans-serif">42×</text>
   <text x="332" y="552" fill="#a5a49b" font-size="9"
-        font-family="Manrope, 'Helvetica Neue', sans-serif">real time, 4 threads</text>
+        font-family="Manrope, 'Helvetica Neue', sans-serif">real time, browser</text>
 
   <line x1="32" y1="592" x2="968" y2="592" stroke="#292a25" stroke-width="0.8"/>
 

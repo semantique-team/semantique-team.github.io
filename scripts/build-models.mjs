@@ -33,6 +33,10 @@
  * `_layout-<family_slug>.html`; every frontmatter field is available to that
  * layout as `{{field}}`.
  *
+ * A model with `status: Coming soon` is not given a page of its own. Its family
+ * layout can place a release-pending card with `{{upcoming}}`, rendered from the
+ * same frontmatter and body.
+ *
  * Runs automatically before `npm run dev` and `npm run build` (see package.json).
  */
 
@@ -105,16 +109,20 @@ async function main() {
 
   for (const [slug, members] of families) {
     const familyLayout = await readFamilyLayout(slug, defaultLayout)
-    const primary = members[0]
+    const published = members.filter((model) => !/coming soon/i.test(model.status))
+    const primary = published[0] || members[0]
     const page = fill(familyLayout, {
-      tabs: members.map((model, index) => renderTab(model, index)).join('\n          '),
-      panels: members.map((model, index) => renderPanel(model, index, members)).join('\n          '),
+      tabs: published.map((model, index) => renderTab(model, index)).join('\n          '),
+      panels: published
+        .map((model, index) => renderPanel(model, index, published))
+        .join('\n          '),
       model_count: String(members.length),
       family_name: primary.family,
       body: primary.body,
       ...Object.fromEntries(
         Object.entries(primary.raw).map(([key, value]) => [key, escapeHtml(value)]),
       ),
+      upcoming: renderUpcoming(members),
     })
     await mkdir(path.join(outDir, slug), { recursive: true })
     await writeFile(path.join(outDir, slug, 'index.html'), page, 'utf8')
@@ -156,7 +164,12 @@ function renderCard(members) {
   const first = members[0]
   const typeLabels = { decision: 'Decision models', stt: 'Speech-to-text models' }
   const typeLabel = typeLabels[first.type] || `${first.type.toUpperCase()} models`
-  const names = members.map((model) => model.name)
+  const names = members.map((model) => {
+    const label = escapeHtml(model.name)
+    return /coming soon/i.test(model.status)
+      ? `${label} <span class="badge">Coming soon</span>`
+      : label
+  })
   const list =
     names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0]
   const summary = members.find((model) => model.familySummary)?.familySummary || ''
@@ -165,7 +178,7 @@ function renderCard(members) {
             <div class="family-card-head">
               <span class="family-card-type" data-reveal>${escapeHtml(typeLabel)}</span>
               <h2 class="family-card-name" data-reveal style="--reveal-delay: 60ms">${escapeHtml(first.family)} family</h2>
-              <p class="family-card-members" data-reveal style="--reveal-delay: 120ms">${escapeHtml(list)}</p>
+              <p class="family-card-members" data-reveal style="--reveal-delay: 120ms">${list}</p>
             </div>
             <div class="family-card-body">
               <p class="family-card-summary" data-reveal style="--reveal-delay: 180ms">${escapeHtml(summary)}</p>
@@ -244,6 +257,36 @@ ${specs.map(([label, value]) => `                <div class="spec"><dt>${escapeH
                 </p>
                 ${comparison}
               </div>
+            </div>
+          </div>`
+}
+
+/* --------------------------------------------------------- upcoming model */
+
+function renderUpcoming(members) {
+  const upcoming = members.find((model) => /coming soon/i.test(model.status))
+  if (!upcoming) return ''
+
+  const specs = [
+    ['Package', upcoming.raw.package],
+    ['Status', upcoming.status],
+    ['Release', upcoming.raw.release],
+  ].filter(([, value]) => value)
+
+  return `<div class="upcoming" data-reveal>
+            <div class="upcoming-copy">
+              <h3 class="upcoming-name">
+                ${escapeHtml(upcoming.name)}
+                <span class="badge">${escapeHtml(upcoming.status)}</span>
+              </h3>
+              <p class="upcoming-tagline">${escapeHtml(upcoming.tagline)}</p>
+              <p class="upcoming-summary">${escapeHtml(upcoming.summary)}</p>
+              <div class="upcoming-body">${upcoming.body}</div>
+            </div>
+            <div class="upcoming-side">
+              <dl class="spec-list">
+${specs.map(([label, value]) => `                <div class="spec"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('\n')}
+              </dl>
             </div>
           </div>`
 }
