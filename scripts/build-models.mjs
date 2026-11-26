@@ -123,6 +123,7 @@ async function main() {
         Object.entries(primary.raw).map(([key, value]) => [key, escapeHtml(value)]),
       ),
       upcoming: renderUpcoming(members),
+      sibling: renderSibling(published),
     })
     await mkdir(path.join(outDir, slug), { recursive: true })
     await writeFile(path.join(outDir, slug, 'index.html'), page, 'utf8')
@@ -259,6 +260,111 @@ ${specs.map(([label, value]) => `                <div class="spec"><dt>${escapeH
               </div>
             </div>
           </div>`
+}
+
+/* -------------------------------------------------------- published sibling */
+
+function renderSibling(published) {
+  const model = published[1]
+  if (!model) return ''
+  const raw = model.raw
+  const stat = (value, label) =>
+    value
+      ? `<div class="stat">
+                  <span class="stat-value">${escapeHtml(value)}</span>
+                  <span class="stat-label">${escapeHtml(label)}</span>
+                </div>`
+      : ''
+  const link = (href, text) =>
+    href ? `<a class="text-link" href="${escapeHtml(href)}">${escapeHtml(text)}</a>` : ''
+  const spec = (label, value) =>
+    value
+      ? `<div class="spec"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`
+      : ''
+
+  return `<section class="models-section page-shell" id="${escapeHtml(model.slug)}" aria-labelledby="${escapeHtml(model.slug)}-title">
+        <div class="section-head">
+          <div class="section-intro" data-reveal>
+            <h2 id="${escapeHtml(model.slug)}-title">${escapeHtml(model.name)}, the 50 MB sibling</h2>
+            <p class="section-lead">${escapeHtml(model.summary)}</p>
+          </div>
+          <div class="shared" data-reveal style="--reveal-delay: 90ms">
+            <h3>At a glance</h3>
+            <ul class="shared-list">
+              <li>Whisper-base encoder, six extra transformer blocks and one linear CTC head over the same 1,024-piece Italian and English BPE.</li>
+              <li>39,259,649 parameters in a 40.0 MB int8 graph; 49.2 MB for the whole package.</li>
+              <li>The same job and deployment as Moth 0.8.1: record then transcribe, on CPU and in a browser tab.</li>
+              <li>Beam 12, top-k 10, LM weight 0.55, token bonus 2.7, E-034c LM and a Silero VAD.</li>
+              <li>Apache-2.0. Initial encoder weights from openai/whisper-base (MIT).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="model-panels" data-reveal>
+          <div class="model-panel is-active">
+            <div class="panel-copy">
+              <h3 class="panel-name">
+                ${escapeHtml(model.name)}${raw.version ? ` ${escapeHtml(raw.version)}` : ''}
+                <span class="panel-tagline">${escapeHtml(model.tagline)}</span>
+              </h3>
+              <div class="panel-body">${model.body}</div>
+              <p class="panel-links">
+                ${link(raw.card, 'Model card and weights')}
+                ${link(raw.release, 'Release notes')}
+                ${link(raw.repo, 'Repository')}
+                ${link(raw.demo, 'Live demo')}
+              </p>
+            </div>
+            <div class="panel-side">
+              <dl class="spec-list">
+                ${spec('Backbone', model.backbone)}
+                ${spec('Parameters', '39,259,649')}
+                ${spec('Package', raw.package)}
+                ${spec('Checkpoint', model.checkpoint)}
+                ${spec('Licence', model.licence)}
+                ${spec('Status', model.status)}
+                ${spec('Decoding', 'beam 12 · LM 0.55')}
+              </dl>
+              <div class="stt-stats">
+                ${stat(raw.wer_t600, 'WER, T-600, 600 clips')}
+                ${stat(raw.eta_t600, 'ETA, T-600, %')}
+                ${stat(raw.wer_s1, 'WER, S1-dev, 960 clips')}
+                ${stat(raw.wer_fleurs_it, 'WER, FLEURS-IT, 697 clips')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="figure-split">
+          <div class="package-panel" data-reveal>
+            <h3>The model package</h3>
+            <dl class="spec-list package-list">
+              <div class="spec"><dt>model.int8.onnx</dt><dd>40.0 MB</dd></div>
+              <div class="spec"><dt>lm_bpe3.bin</dt><dd>7.8 MB</dd></div>
+              <div class="spec"><dt>silero_vad.onnx</dt><dd>1.3 MB</dd></div>
+              <div class="spec"><dt>vocab.json</dt><dd>17 KB</dd></div>
+              <div class="spec"><dt>mel_filters.bin</dt><dd>64 KB</dd></div>
+              <div class="spec"><dt>config.json</dt><dd>1.4 KB</dd></div>
+              <div class="spec"><dt>NOTICE</dt><dd>4.4 KB</dd></div>
+            </dl>
+            <p class="package-total">
+              ${escapeHtml(raw.package_bytes || '49,204,097')} bytes,
+              ${escapeHtml(raw.remaining_bytes || '795,903')} under the 50 MB ceiling.
+            </p>
+          </div>
+
+          <div class="limits" data-reveal style="--reveal-delay: 110ms">
+            <h3>Where it still fails</h3>
+            <ul>
+              <li>Pure English is a check, not a use case: ${escapeHtml(raw.wer_fleurs_en || '28.20')} WER on FLEURS-EN.</li>
+              <li>CS-FLEURS-READ is one speaker and one read: ${escapeHtml(raw.wer_cs_fleurs || '34.81')} WER.</li>
+              <li>Scripted read speech, not spontaneous conversation; no far-field, strong accents, children or unseen dialects.</li>
+              <li>S1, S2 and S3 are known voices. S3 never trained, but the model was evaluated on it repeatedly.</li>
+              <li>No punctuation, no casing, no user glossary; at most 30 seconds per pass.</li>
+            </ul>
+          </div>
+        </div>
+      </section>`
 }
 
 /* --------------------------------------------------------- upcoming model */

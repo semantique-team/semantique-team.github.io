@@ -2,7 +2,7 @@
 family: Moth
 family_slug: moth
 type: stt
-family_summary: A 19.7 MB speech-to-text model for Italian speech with English terms inside it. It runs in a browser tab, on a CPU, and the audio never leaves the machine. A larger sibling, under 50 MB, is in development.
+family_summary: A 19.7 MB speech-to-text model for Italian speech with English terms inside it. It runs in a browser tab, on a CPU, and the audio never leaves the machine. MOTH-50, the 49.2 MB sibling, is also published.
 name: Moth
 slug: moth
 tagline: Italian speech, English terms, one small package

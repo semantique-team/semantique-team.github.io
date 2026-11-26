@@ -6,10 +6,10 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0c0d0b" />
-    <meta name="description" content="Moth is a 19.7 MB Italian + English code-switching speech-to-text model from Semantique. It runs in a browser tab, on CPU, with 11.6M parameters." />
+    <meta name="description" content="Moth is the Semantique speech-to-text family for Italian with English terms inside it: 0.8.1 at 19.7 MB and MOTH-50 at 49.2 MB. Both run in a browser tab, on CPU." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Moth — Semantique" />
-    <meta property="og:description" content="Moth is a 19.7 MB Italian + English code-switching speech-to-text model from Semantique. It runs in a browser tab, on CPU, with 11.6M parameters." />
+    <meta property="og:description" content="Moth is the Semantique speech-to-text family for Italian with English terms inside it: 0.8.1 at 19.7 MB and MOTH-50 at 49.2 MB. Both run in a browser tab, on CPU." />
     <meta property="og:site_name" content="Semantique" />
     <link rel="stylesheet" href="/models/models.css" />
     <title>Moth — Semantique</title>
@@ -40,16 +40,18 @@
               height="30"
               alt=""
             />
-            <span>Speech-to-text · 0.8.1</span>
+            <span>Speech-to-text · 0.8.1 and MOTH-50</span>
           </p>
           <h1 id="hero-title">Moth,<br /><em>in the browser.</em></h1>
           <p class="hero-lead">
-            An 11.6-million-parameter speech-to-text model for Italian with English
-            terms inside it. It packs into 19.7 MB and transcribes on a CPU, in a
-            tab, with the audio never leaving the machine.
+            Two speech-to-text models for Italian with English terms inside it.
+            0.8.1 packs 11.6 million parameters into 19.7 MB; MOTH-50 packs 39.3
+            million into 49.2 MB. Both transcribe on a CPU, in a tab, with the
+            audio never leaving the machine.
           </p>
           <div class="hero-actions" data-reveal>
-            <a class="button" href="{{demo}}">Try the live demo</a>
+            <a class="button" href="{{demo}}">Try Moth 0.8.1</a>
+            <a class="text-link" href="#moth-50">MOTH-50, the 50 MB model</a>
             <a class="text-link" href="{{paper}}">Read the paper</a>
             <a class="text-link" href="#numbers">See the numbers</a>
           </div>
@@ -86,7 +88,7 @@
       <section class="models-section page-shell" id="model" aria-labelledby="model-title">
         <div class="section-head">
           <div class="section-intro" data-reveal>
-            <h2 id="model-title">What it is</h2>
+            <h2 id="model-title">What Moth 0.8.1 is</h2>
             <p class="section-lead">
               A CTC model built on a Whisper-tiny encoder. It keeps the acoustic
               half, drops the decoder, and adds two transformer blocks and a linear
@@ -159,7 +161,7 @@
       <section class="models-section page-shell" id="numbers" aria-labelledby="numbers-title">
         <div class="section-head">
           <div class="section-intro" data-reveal>
-            <h2 id="numbers-title">The numbers</h2>
+            <h2 id="numbers-title">The numbers, 0.8.1</h2>
             <p class="section-lead">
               All figures are normalized WER and ETA on the published int8 model,
               decoded with beam 12, top-k 10, LM weight 0.55 and token bonus 2.7.
@@ -236,7 +238,7 @@
       <section class="how-section page-shell" id="noise" aria-labelledby="noise-title">
         <div class="section-head">
           <div class="section-intro" data-reveal>
-            <h2 id="noise-title">Noise</h2>
+            <h2 id="noise-title">Noise, 0.8.1</h2>
             <p class="section-lead">
               The 0.7.0 recipe heard half of its Italian read speech through noise.
               That is where the noise robustness came from. 0.8.1 keeps the 0.8.0
@@ -291,7 +293,7 @@
       <section class="how-section page-shell" id="english" aria-labelledby="english-title">
         <div class="section-head">
           <div class="section-intro" data-reveal>
-            <h2 id="english-title">The English words</h2>
+            <h2 id="english-title">The English words, 0.8.1</h2>
             <p class="section-lead">
               The headline WER hides the part the model is for: the English terms
               inside Italian. 0.8.1 rebuilt the language model around them, without
@@ -442,7 +444,7 @@ text, seconds = runtime.transcribe(audio, sample_rate=sample_rate)</code></pre>
       <section class="how-section page-shell" id="paper" aria-labelledby="paper-heading">
         <div class="section-head">
           <div class="section-intro" data-reveal>
-            <h2 id="paper-heading">The paper</h2>
+            <h2 id="paper-heading">The 0.8.1 paper</h2>
             <p class="section-lead">
               The 0.8.1 paper is a preprint in the moth-stt repository. It reports
               the {{experiments}}-experiment development record behind the release,
@@ -489,36 +491,14 @@ text, seconds = runtime.transcribe(audio, sample_rate=sample_rate)</code></pre>
         </div>
       </section>
 
-      <section class="models-section page-shell" id="next" aria-labelledby="next-heading">
-        <div class="section-head">
-          <div class="section-intro" data-reveal>
-            <h2 id="next-heading">The next Moth</h2>
-            <p class="section-lead">
-              Moth 0.8.1 is built to a hard 20 MB ceiling. The next model is a
-              larger sibling, built to a ceiling under 50 MB, with its own
-              repository and its own paper.
-            </p>
-          </div>
-          <div class="shared" data-reveal style="--reveal-delay: 90ms">
-            <h3>What carries over</h3>
-            <ul class="shared-list">
-              <li>The same job: Italian speech with English terms inside it.</li>
-              <li>The same deployment: record then transcribe, on CPU and in a browser tab.</li>
-              <li>A ceiling under 50 MB, against 19.7 MB for the published release.</li>
-              <li>Links to its repository and paper will appear here when they exist.</li>
-            </ul>
-          </div>
-        </div>
-
-        {{upcoming}}
-      </section>
+      {{sibling}}
 
       <section class="try-section page-shell" id="try" aria-labelledby="try-title">
         <div class="section-head">
           <div class="section-intro" data-reveal>
-            <h2 id="try-title">Try it</h2>
+            <h2 id="try-title">Try Moth 0.8.1</h2>
             <p class="section-lead">
-              The live demo loads the same package through ONNX Runtime Web in the
+              The 0.8.1 live demo loads the same package through ONNX Runtime Web in the
               tab. Model, LM and VAD download once; the recording stays local.
               Nothing is sent to a server.
             </p>
