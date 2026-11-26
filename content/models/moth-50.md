@@ -9,6 +9,8 @@ tagline: The 50 MB Moth, with the same job
 summary: MOTH-50 is the second Moth: a 49.2 MB code-switching speech-to-text model built on a Whisper-base encoder, with six extra transformer blocks and a linear CTC head. It runs on CPU and in a browser tab, and the audio never leaves the machine.
 backbone: Whisper-base encoder + 6 blocks
 parameters: 39,259,649
+parameters_exact: 39,259,649
+panel_note: S1-dev: 13.3820 WER / 75.1465 ETA. CS-FLEURS-READ: 34.8085 WER (176 utterances, one speaker, test-only).
 checkpoint: E-023 R1 seed 0
 licence: Apache-2.0
 status: Published 2026-11-26
@@ -23,6 +25,7 @@ remaining_bytes: 795,903
 wer_t600: 12.2993
 eta_t600: 78.1400
 wer_s1: 13.3820
+wer_s1_dev: 13.3820
 eta_s1: 75.1465
 wer_s2: 13.4666
 wer_s3: 13.3731
@@ -33,11 +36,10 @@ browser_rtfx: 28.48
 order: 20
 ---
 
-MOTH-50 is the second model in the family, released on 2026-11-26 as
-`0.9.8-e023-r1`. It keeps the same job and the same deployment contract as
-0.8.1 — Italian speech with English terms inside, record then transcribe, on a
-CPU and in a browser tab — with a 50 MB ceiling instead of the 20 MB that shaped
-the first model.
+Released on 2026-11-26 as `0.9.8-e023-r1`, it keeps the same job and the same
+deployment contract as 0.8.1 — Italian speech with English terms inside, record
+then transcribe, on a CPU and in a browser tab — with a 50 MB ceiling instead of
+the 20 MB that shaped the first model.
 
 The extra room buys a Whisper-base encoder with six additional transformer
 blocks and a linear CTC head: 39,259,649 acoustic parameters in a 40.0 MB int8

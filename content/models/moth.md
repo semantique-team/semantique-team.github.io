@@ -3,8 +3,10 @@ family: Moth
 family_slug: moth
 type: stt
 family_summary: A 19.7 MB speech-to-text model for Italian speech with English terms inside it. It runs in a browser tab, on a CPU, and the audio never leaves the machine. MOTH-50, the 49.2 MB sibling, is also published.
-name: Moth
+name: Moth 0.8.1
 slug: moth
+parameters_exact: 11,575,169
+panel_note: Held-out S3: 24.96 WER / 51.27 ETA. Rare-term ETA: 46.9%.
 tagline: Italian speech, English terms, one small package
 summary: Moth is a CTC speech-to-text model for the way Italians actually talk: Italian sentences with English words and phrases inside them. It is built on a Whisper-tiny encoder, ships as a 19.7 MB package, and transcribes in the browser through ONNX Runtime Web.
 backbone: Whisper-tiny encoder + 2 blocks

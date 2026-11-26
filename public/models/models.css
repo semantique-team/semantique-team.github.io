@@ -423,6 +423,10 @@ img {
   line-height: 1.6;
 }
 
+.transcript .spec-list {
+  margin-top: 18px;
+}
+
 /* --------------------------------------------------------------- sections */
 
 .models-section,
@@ -681,6 +685,68 @@ html:not(.js) .model-panel {
   line-height: 1.45;
 }
 
+/* ---------------------------------------------------------- benchmark table */
+
+.bench-wrap {
+  margin-top: 56px;
+  overflow-x: auto;
+}
+
+.bench-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.bench-table th,
+.bench-table td {
+  padding: 14px 18px;
+  text-align: right;
+}
+
+.bench-table th:first-child,
+.bench-table td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.bench-table thead th {
+  color: var(--quiet);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.bench-table thead th:not(:first-child) {
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+.bench-table tbody th {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.bench-table tbody td {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-table tbody td.is-empty {
+  color: var(--quiet);
+}
+
+.bench-table tbody tr + tr {
+  border-top: 1px solid var(--line);
+}
+
 /* ------------------------------------------------------------- next model */
 
 .upcoming {
@@ -855,6 +921,14 @@ html:not(.js) .model-panel {
   color: var(--muted);
   font-size: 15px;
   line-height: 1.6;
+}
+
+.package-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  margin-top: 64px;
+  align-items: start;
 }
 
 /* ------------------------------------------------------- how it works */
@@ -1149,7 +1223,8 @@ html:not(.js) [data-reveal] {
   .section-head,
   .model-panel,
   .upcoming,
-  .figure-split {
+  .figure-split,
+  .package-pair {
     grid-template-columns: 1fr;
   }
 

@@ -87,19 +87,18 @@ The longer description of the model.
   from `content/models/_layout.html`. `/models/ant/` holds the model switcher,
   the numbers, the charts, how a decision is made and how to run it. A directory
   row can open one model directly with `?model=ant-08b`. `/models/moth/` is an
-  STT page with its own layout: Moth 0.8.1 is the primary model and MOTH-50 is
-  rendered below it by `{{sibling}}`, from the second published member of the
-  family.
+  STT page with its own layout: the model switcher (`{{tabs}}` and `{{panels}}`,
+  rendered with STT metrics) and the family benchmark table (`{{benchmarks}}`)
+  cover both Moth 0.8.1 and MOTH-50.
 
 Every frontmatter field is available inside a family layout as `{{field}}`
 (for example `{{summary}}`, `{{repo}}` or a custom metric), so a family layout
 can stay data-driven without duplicating the Markdown. Moth adds STT-specific
-fields such as `weights`, `demo`, `card`, `paper`, `wer_t600` and `rare_eta`,
-which `_layout-moth.html` reads directly. A model with `status: Coming soon` is
-not given a page of its own; its family layout places the pending card with
-`{{upcoming}}`, rendered from the same frontmatter and body. A published model
-after the first is available to a custom layout as `{{sibling}}`; Moth uses it
-for MOTH-50.
+fields such as `weights`, `demo`, `card`, `paper`, `release`, `wer_t600`,
+`wer_fleurs_it`, `wer_fleurs_en` and `panel_note`, which the STT panel and
+benchmark renderers read. A model with `status: Coming soon` is not given a page
+of its own; its family layout places the pending card with `{{upcoming}}`,
+rendered from the same frontmatter and body.
 
 Both are styled by `public/models/models.css` and behave with
 `public/models/models.js`: the filters, the model switcher, the section entrances

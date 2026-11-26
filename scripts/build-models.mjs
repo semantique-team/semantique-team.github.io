@@ -111,19 +111,33 @@ async function main() {
     const familyLayout = await readFamilyLayout(slug, defaultLayout)
     const published = members.filter((model) => !/coming soon/i.test(model.status))
     const primary = published[0] || members[0]
+    const sibling = published[1]
+    const isStt = primary.type === 'stt'
     const page = fill(familyLayout, {
       tabs: published.map((model, index) => renderTab(model, index)).join('\n          '),
       panels: published
-        .map((model, index) => renderPanel(model, index, published))
+        .map((model, index) =>
+          isStt ? renderSttPanel(model, index) : renderPanel(model, index, published),
+        )
         .join('\n          '),
+      benchmarks: isStt ? renderSttBenchmarks(published) : '',
       model_count: String(members.length),
       family_name: primary.family,
       body: primary.body,
       ...Object.fromEntries(
         Object.entries(primary.raw).map(([key, value]) => [key, escapeHtml(value)]),
       ),
+      sibling_name: sibling ? escapeHtml(sibling.name) : '',
+      sibling_package: sibling ? escapeHtml(sibling.raw.package || '') : '',
+      sibling_wer_t600: sibling ? escapeHtml(sibling.raw.wer_t600 || '') : '',
+      sibling_demo: sibling ? escapeHtml(sibling.raw.demo || '') : '',
+      sibling_weights: sibling ? escapeHtml(sibling.raw.weights || '') : '',
+      sibling_repo: sibling ? escapeHtml(sibling.raw.repo || '') : '',
+      sibling_wer_fleurs_en: sibling ? escapeHtml(sibling.raw.wer_fleurs_en || '') : '',
+      sibling_wer_cs_fleurs: sibling ? escapeHtml(sibling.raw.wer_cs_fleurs || '') : '',
+      sibling_package_bytes: sibling ? escapeHtml(sibling.raw.package_bytes || '') : '',
+      sibling_remaining_bytes: sibling ? escapeHtml(sibling.raw.remaining_bytes || '') : '',
       upcoming: renderUpcoming(members),
-      sibling: renderSibling(published),
     })
     await mkdir(path.join(outDir, slug), { recursive: true })
     await writeFile(path.join(outDir, slug, 'index.html'), page, 'utf8')
@@ -262,12 +276,12 @@ ${specs.map(([label, value]) => `                <div class="spec"><dt>${escapeH
           </div>`
 }
 
-/* -------------------------------------------------------- published sibling */
+/* ----------------------------------------------------------- STT panels */
 
-function renderSibling(published) {
-  const model = published[1]
-  if (!model) return ''
+function renderSttPanel(model, index) {
   const raw = model.raw
+  const active = index === 0 ? ' is-active' : ''
+  const version = raw.version ? ` ${escapeHtml(raw.version)}` : ''
   const stat = (value, label) =>
     value
       ? `<div class="stat">
@@ -281,44 +295,35 @@ function renderSibling(published) {
     value
       ? `<div class="spec"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`
       : ''
+  const paperOrRelease = raw.paper
+    ? link(raw.paper, 'Read the paper')
+    : link(raw.release, 'Release notes')
 
-  return `<section class="models-section page-shell" id="${escapeHtml(model.slug)}" aria-labelledby="${escapeHtml(model.slug)}-title">
-        <div class="section-head">
-          <div class="section-intro" data-reveal>
-            <h2 id="${escapeHtml(model.slug)}-title">${escapeHtml(model.name)}, the 50 MB sibling</h2>
-            <p class="section-lead">${escapeHtml(model.summary)}</p>
-          </div>
-          <div class="shared" data-reveal style="--reveal-delay: 90ms">
-            <h3>At a glance</h3>
-            <ul class="shared-list">
-              <li>Whisper-base encoder, six extra transformer blocks and one linear CTC head over the same 1,024-piece Italian and English BPE.</li>
-              <li>39,259,649 parameters in a 40.0 MB int8 graph; 49.2 MB for the whole package.</li>
-              <li>The same job and deployment as Moth 0.8.1: record then transcribe, on CPU and in a browser tab.</li>
-              <li>Beam 12, top-k 10, LM weight 0.55, token bonus 2.7, E-034c LM and a Silero VAD.</li>
-              <li>Apache-2.0. Initial encoder weights from openai/whisper-base (MIT).</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="model-panels" data-reveal>
-          <div class="model-panel is-active">
+  return `<div
+            class="model-panel${active}"
+            role="tabpanel"
+            id="panel-${escapeHtml(model.slug)}"
+            aria-labelledby="tab-${escapeHtml(model.slug)}"
+            data-model="${escapeHtml(model.slug)}"
+          >
             <div class="panel-copy">
               <h3 class="panel-name">
-                ${escapeHtml(model.name)}${raw.version ? ` ${escapeHtml(raw.version)}` : ''}
+                ${escapeHtml(model.name)}${version}
                 <span class="panel-tagline">${escapeHtml(model.tagline)}</span>
               </h3>
+              <p class="panel-summary">${escapeHtml(model.summary)}</p>
               <div class="panel-body">${model.body}</div>
               <p class="panel-links">
                 ${link(raw.card, 'Model card and weights')}
-                ${link(raw.release, 'Release notes')}
-                ${link(raw.repo, 'Repository')}
                 ${link(raw.demo, 'Live demo')}
+                ${link(raw.repo, 'Repository')}
+                ${paperOrRelease}
               </p>
             </div>
             <div class="panel-side">
               <dl class="spec-list">
                 ${spec('Backbone', model.backbone)}
-                ${spec('Parameters', '39,259,649')}
+                ${spec('Parameters', raw.parameters_exact || model.parameters)}
                 ${spec('Package', raw.package)}
                 ${spec('Checkpoint', model.checkpoint)}
                 ${spec('Licence', model.licence)}
@@ -328,43 +333,72 @@ function renderSibling(published) {
               <div class="stt-stats">
                 ${stat(raw.wer_t600, 'WER, T-600, 600 clips')}
                 ${stat(raw.eta_t600, 'ETA, T-600, %')}
-                ${stat(raw.wer_s1, 'WER, S1-dev, 960 clips')}
-                ${stat(raw.wer_fleurs_it, 'WER, FLEURS-IT, 697 clips')}
+                ${stat(raw.wer_fleurs_it, 'WER, FLEURS-IT')}
+                ${stat(raw.wer_fleurs_en, 'WER, FLEURS-EN')}
               </div>
+              ${raw.panel_note ? `<p class="metric-note">${escapeHtml(raw.panel_note)}</p>` : ''}
             </div>
-          </div>
-        </div>
+          </div>`
+}
 
-        <div class="figure-split">
-          <div class="package-panel" data-reveal>
-            <h3>The model package</h3>
-            <dl class="spec-list package-list">
-              <div class="spec"><dt>model.int8.onnx</dt><dd>40.0 MB</dd></div>
-              <div class="spec"><dt>lm_bpe3.bin</dt><dd>7.8 MB</dd></div>
-              <div class="spec"><dt>silero_vad.onnx</dt><dd>1.3 MB</dd></div>
-              <div class="spec"><dt>vocab.json</dt><dd>17 KB</dd></div>
-              <div class="spec"><dt>mel_filters.bin</dt><dd>64 KB</dd></div>
-              <div class="spec"><dt>config.json</dt><dd>1.4 KB</dd></div>
-              <div class="spec"><dt>NOTICE</dt><dd>4.4 KB</dd></div>
-            </dl>
-            <p class="package-total">
-              ${escapeHtml(raw.package_bytes || '49,204,097')} bytes,
-              ${escapeHtml(raw.remaining_bytes || '795,903')} under the 50 MB ceiling.
-            </p>
-          </div>
+/* ------------------------------------------------------- STT benchmarks */
 
-          <div class="limits" data-reveal style="--reveal-delay: 110ms">
-            <h3>Where it still fails</h3>
-            <ul>
-              <li>Pure English is a check, not a use case: ${escapeHtml(raw.wer_fleurs_en || '28.20')} WER on FLEURS-EN.</li>
-              <li>CS-FLEURS-READ is one speaker and one read: ${escapeHtml(raw.wer_cs_fleurs || '34.81')} WER.</li>
-              <li>Scripted read speech, not spontaneous conversation; no far-field, strong accents, children or unseen dialects.</li>
-              <li>S1, S2 and S3 are known voices. S3 never trained, but the model was evaluated on it repeatedly.</li>
-              <li>No punctuation, no casing, no user glossary; at most 30 seconds per pass.</li>
-            </ul>
-          </div>
-        </div>
-      </section>`
+function renderSttBenchmarks(models) {
+  const rows = [
+    ['Parameters', 'parameters_exact'],
+    ['Package', 'package'],
+    ['T-600 WER, 600 clips', 'wer_t600'],
+    ['T-600 ETA, %', 'eta_t600'],
+    ['FLEURS-IT WER, 697 clips', 'wer_fleurs_it'],
+    ['FLEURS-EN WER, 525 clips', 'wer_fleurs_en'],
+    ['S1-dev WER, 960 clips', 'wer_s1_dev'],
+    ['CS-FLEURS-READ WER, 176', 'wer_cs_fleurs'],
+  ]
+  const header = models
+    .map((model) => `<th scope="col">${escapeHtml(model.name)}</th>`)
+    .join('')
+  const body = rows
+    .map(([label, field]) => {
+      const cells = models
+        .map((model) => {
+          const value = model.raw[field]
+          const missing = value === undefined || value === ''
+          return `<td${missing ? ' class="is-empty"' : ''}>${escapeHtml(
+            String(missing ? 'not published' : value),
+          )}</td>`
+        })
+        .join('')
+      return `<tr><th scope="row">${escapeHtml(label)}</th>${cells}</tr>`
+    })
+    .join('\n          ')
+
+  const first = models[0]
+  const second = models[1]
+  const notes = []
+  if (first.raw.wer_s3) {
+    notes.push(
+      `${first.name}: held-out S3 ${first.raw.wer_s3} WER / ${first.raw.eta_s3} ETA.`,
+    )
+  }
+  if (second && second.raw.wer_s1) {
+    notes.push(
+      `${second.name}: S1-dev ${second.raw.wer_s1} WER / ${second.raw.eta_s1} ETA; ` +
+        `CS-FLEURS-READ ${second.raw.wer_cs_fleurs} WER ` +
+        '(176 utterances, one speaker, test-only).',
+    )
+  }
+
+  return `<div class="bench-wrap" data-reveal>
+        <table class="bench-table">
+          <thead>
+            <tr><th scope="col">Metric</th>${header}</tr>
+          </thead>
+          <tbody>
+          ${body}
+          </tbody>
+        </table>
+      </div>
+      <p class="metric-note">${notes.map(escapeHtml).join(' ')}</p>`
 }
 
 /* --------------------------------------------------------- upcoming model */
